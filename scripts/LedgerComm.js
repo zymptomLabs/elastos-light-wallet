@@ -2,6 +2,7 @@
 const TransportNodeHid = {};
 TransportNodeHid.default = {};
 TransportNodeHid.default.isSupported = ( () => { return false; } );
+TransportNodeHid.default.list = ( () => { return [] } );
 
 const LOG_LEDGER_MESSAGE = false;
 
