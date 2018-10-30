@@ -17,7 +17,7 @@ const createSendToTx = (privateKey,unspentTransactionOutputs, sendToAddress, sen
   console.log('createSendToTx.address ' + JSON.stringify(address));
 
   const tx = {};
-  tx.TxType - 2;
+  tx.TxType = 2;
   tx.PayloadVersion = 0;
   tx.TxAttributes = [];
   tx.UTXOInputs = [];

@@ -2,7 +2,7 @@
 const TransportNodeHid = {};
 TransportNodeHid.default = {};
 TransportNodeHid.default.isSupported = ( () => { return false; } );
-TransportNodeHid.default.list = ( () => { return [] } );
+TransportNodeHid.default.list = [];
 
 const LOG_LEDGER_MESSAGE = false;
 
@@ -17,6 +17,7 @@ const getLedgerDeviceInfo = ( callback ) => {
     const supported = TransportNodeHid.default.isSupported();
     if ( !supported ) {
         callback( finishLedgerDeviceInfo( 'Your computer does not support the ledger device.' ) );
+        return;
     }
 
     TransportNodeHid.default.list().then(( paths ) => {

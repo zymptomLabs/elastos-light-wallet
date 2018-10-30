@@ -118,10 +118,12 @@ const postJson = ( url, json, readyCallback, errorCallback ) => {
             }
         }
     }
-    xhttp.responseType = 'text';
+    xhttp.responseType = 'json';
     xhttp.open( 'POST', url, true );
     xhttp.setRequestHeader( 'Content-Type', 'application/json' );
-    xhttp.send( JSON.stringify( json ) );
+    
+    const jsonString = JSON.stringify( json );
+    xhttp.send( jsonString );
 }
 
 const getJson = ( url, callback ) => {
@@ -267,7 +269,7 @@ const sendAmountToAddress = () => {
     sendToAddressStatuses.length = 0;
     sendToAddressStatuses.push( JSON.stringify( encodedTx ) );
     sendToAddressStatuses.push( JSON.stringify( decodedTx ) );
-    sendToAddressStatuses.push( `Transaction Requested: curl ${txUrl} -H "Content-Type: application/json" -d \"${json}\"` );
+    sendToAddressStatuses.push( `Transaction Requested: curl ${txUrl} -H "Content-Type: application/json" -d '${json}'` );
     renderApp();
     postJson( ELA_RPC_URL_PREFIX, json, sendAmountToAddressReadyCallback, sendAmountToAddressErrorCallback );
 }

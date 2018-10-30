@@ -5,6 +5,8 @@ var app = electron.app; // Module to control application life.
 var BrowserWindow = electron.BrowserWindow; // Module to create native browser
 // window.
 
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 // Report crashes to our server.
 // require('crash-reporter').start();
 
