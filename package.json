@@ -1,0 +1,49 @@
+{
+	"name": "elastos-light-wallet",
+	"version": "1.0.0",
+	"description": "elastos light wallet",
+	"main": "index.js",
+	"scripts": {
+		"start": "electron . --enable-logging --remote-debugging-port=9222",
+		"test": "./node_modules/mocha/bin/mocha test",
+		"electron-rebuild": "electron-rebuild --force --module_dir .",
+		"postinstall": "electron-builder install-app-deps && electron-rebuild --force --module_dir ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/coranos/elastos-light-wallet.git"
+	},
+	"keywords": [
+		"elastos"
+	],
+	"author": "coranos",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/coranos/elastos-light-wallet/issues"
+	},
+	"homepage": "https://github.com/coranos/elastos-light-wallet#readme",
+	"ledger-dependencies": {
+		"@ledgerhq/hw-transport-node-hid": "^4.2.0"
+	},
+	"dependencies": {
+		"babel-runtime": "^6.26.0",
+		"bignumber.js": "^7.2.1",
+		"bitcoinjs-lib": "^4.0.2",
+		"bs58": "^4.0.1",
+		"electron": "^3.0.2",
+		"electron-builder": "20.10.0",
+		"electron-rebuild": "^1.8.2",
+		"elliptic": "^6.4.1",
+		"node-jsx": "^0.13.3",
+		"react": "^16.5.2",
+		"react-bootstrap": "^0.32.4",
+		"react-dom": "^16.5.2",
+		"ripemd160": "^2.0.2",
+		"smart-buffer": "^4.0.1",
+		"wif": "^2.0.6"
+	},
+	"devDependencies": {
+		"chai": "^4.2.0",
+		"mocha": "^5.2.0"
+	}
+}
