@@ -18,6 +18,7 @@ const createSendToTx = (privateKey,unspentTransactionOutputs, sendToAddress, sen
 
   const tx = {};
   tx.TxType = 2;
+  tx.LockTime = 0;
   tx.PayloadVersion = 0;
   tx.TxAttributes = [];
   tx.UTXOInputs = [];
@@ -35,7 +36,7 @@ const createSendToTx = (privateKey,unspentTransactionOutputs, sendToAddress, sen
   unspentTransactionOutputs.forEach(( utxo ) => {
       if ( inputValue < sendAmount ) {
           const utxoInput = {};
-          utxoInput.TxId = utxo.Txid;
+          utxoInput.TxId = utxo.Txid.toUpperCase();
           utxoInput.ReferTxOutputIndex = utxo.Index;
           utxoInput.Sequence = tx.UTXOInputs.length;
 
@@ -56,7 +57,7 @@ const createSendToTx = (privateKey,unspentTransactionOutputs, sendToAddress, sen
       const changeValue = sendAmount - inputValue;
       const changeOutput = {};
       changeOutput.AssetID = Asset.elaAssetId;
-      changeOutput.Value = changeValue;
+      changeOutput.Value = changeValue.toString();
       changeOutput.OutputLock = 0;
       changeOutput.Address = address;
       tx.Outputs.push( changeOutput );
