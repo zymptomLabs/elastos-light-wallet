@@ -9,6 +9,8 @@ const Col = require( 'react-bootstrap' ).Col;
 const Grid = require( 'react-bootstrap' ).Grid;
 const Table = require( 'react-bootstrap' ).Table;
 
+const BigNumber = require( 'bignumber.js' );
+
 const LedgerComm = require( './LedgerComm.js' );
 
 const AddressTranscoder = require( './AddressTranscoder.js' )
@@ -19,6 +21,7 @@ const Asset = require( './Asset.js' )
 const TxFactory = require( './TxFactory.js' )
 
 /** global constants */
+
 const LOG_LEDGER_POLLING = false;
 
 const MAX_POLL_DATA_TYPE_IX = 2;
@@ -121,7 +124,7 @@ const postJson = ( url, json, readyCallback, errorCallback ) => {
     xhttp.responseType = 'json';
     xhttp.open( 'POST', url, true );
     xhttp.setRequestHeader( 'Content-Type', 'application/json' );
-    
+
     const jsonString = JSON.stringify( json );
     xhttp.send( jsonString );
 }
@@ -159,10 +162,14 @@ const getUnspentTransactionOutputsCallback = ( response ) => {
     unspentTransactionOutputsStatus = 'UTXOs Received';
     parsedUnspentTransactionOutputs.length = 0;
 
-    // console.log( 'getUnspentTransactionOutputsCallback ' + JSON.stringify( response ) );
+    console.log( 'getUnspentTransactionOutputsCallback ' + JSON.stringify( response ) );
 
     response.Result.forEach(( utxo, utxoIx ) => {
+        const valueBigNumber = BigNumber( utxo.Value, 10 );
+
         utxo.utxoIx = utxoIx;
+        utxo.valueSats = valueBigNumber.times( Asset.satoshis );
+
         parsedUnspentTransactionOutputs.push( utxo );
     } );
 
@@ -233,7 +240,7 @@ const getPublicKeyFromPrivateKey = () => {
 }
 
 const sendAmountToAddressErrorCallback = ( error ) => {
-    sendToAddressStatuses.push( error );
+    sendToAddressStatuses.push( JSON.stringify( error ) );
     renderApp();
 }
 
@@ -418,7 +425,8 @@ class App extends React.Component {
                         <th>TX Number</th>
                         <th>Value Type</th>
                         <th>Address</th>
-                        <th>Value</th>
+                        <th>Value (ELA)</th>
+                        <th>Value (Sats)</th>
                     </tr>
                     {
                         parsedTransactionHistory.map( function( item, key ) {
@@ -427,6 +435,7 @@ class App extends React.Component {
                                 <td>{item.type}</td>
                                 <td>{item.address}</td>
                                 <td>{item.value}</td>
+                                <td>{item.valueSat}</td>
                             </tr> )
                         } )
                     }
@@ -442,7 +451,8 @@ class App extends React.Component {
                         <th>utxoIx</th>
                         <th>Txid</th>
                         <th>Index</th>
-                        <th>Value</th>
+                        <th>Value (ELA)</th>
+                        <th>Value (Sats)</th>
                     </tr>
                     {
                         parsedUnspentTransactionOutputs.map( function( item, key ) {
@@ -451,6 +461,7 @@ class App extends React.Component {
                                 <td>{item.Txid}</td>
                                 <td>{item.Index}</td>
                                 <td>{item.Value}</td>
+                                <td>{item.ValueSats}</td>
                             </tr> )
                         } )
                     }

@@ -3,6 +3,7 @@ const TxTranscoder = require('./TxTranscoder.js')
 const TxSigner = require('./TxSigner.js')
 const AddressTranscoder = require('./AddressTranscoder.js')
 const Asset = require( './Asset.js' )
+const BigNumber = require('bignumber.js');
 
 const createSendToTx = (privateKey,unspentTransactionOutputs, sendToAddress, sendAmount) => {
   
@@ -31,33 +32,36 @@ const createSendToTx = (privateKey,unspentTransactionOutputs, sendToAddress, sen
     txAttribute.Data = '30';
     tx.TxAttributes.push(txAttribute);
   }
-  
-  var inputValue = 0;
+
+  var sendAmountSats = BigNumber(sendAmount,10).times(Asset.satoshis);
+
+  var inputValueSats = BigNumber(0,10);
   unspentTransactionOutputs.forEach(( utxo ) => {
-      if ( inputValue < sendAmount ) {
+      if ( inputValueSats.isLessThan(sendAmountSats )) {
+        
           const utxoInput = {};
           utxoInput.TxId = utxo.Txid.toUpperCase();
           utxoInput.ReferTxOutputIndex = utxo.Index;
           utxoInput.Sequence = tx.UTXOInputs.length;
 
           tx.UTXOInputs.push( utxoInput );
-          inputValue += utxo.Value;
+          inputValueSats = inputValueSats.plus(utxo.valueSats);
       }
   } );
 
   {
       const sendOutput = {};
       sendOutput.AssetID = Asset.elaAssetId;
-      sendOutput.Value = sendAmount;
+      sendOutput.Value = sendAmountSats.toString(10);
       sendOutput.OutputLock = 0;
       sendOutput.Address = sendToAddress;
       tx.Outputs.push( sendOutput );
   }
   {
-      const changeValue = sendAmount - inputValue;
+      const changeValue = sendAmountSats.minus(inputValueSats);
       const changeOutput = {};
       changeOutput.AssetID = Asset.elaAssetId;
-      changeOutput.Value = changeValue.toString();
+      changeOutput.Value = changeValue.toString(10);
       changeOutput.OutputLock = 0;
       changeOutput.Address = address;
       tx.Outputs.push( changeOutput );
