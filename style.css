@@ -50,3 +50,7 @@ table, tr, td, th {
   width: 775px;
   height: 515px;
 }
+
+.break_all {
+  word-break: break-all;
+}

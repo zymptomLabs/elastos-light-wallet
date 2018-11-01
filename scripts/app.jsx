@@ -108,12 +108,13 @@ const setPollForAllInfoTimer = () => {
     setTimeout( pollForData, 1 );
 }
 
-const postJson = ( url, json, readyCallback, errorCallback ) => {
+const postJson = ( url, jsonString, readyCallback, errorCallback ) => {
     var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
 
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if ( this.readyState == 4 ) {
+            // sendToAddressStatuses.push( `XMLHttpRequest: status:${this.status} response:'${this.response}'` );
             if ( this.status == 200 ) {
                 readyCallback( JSON.parse( this.response ) );
             } else {
@@ -121,11 +122,12 @@ const postJson = ( url, json, readyCallback, errorCallback ) => {
             }
         }
     }
-    xhttp.responseType = 'json';
+    xhttp.responseType = 'text';
     xhttp.open( 'POST', url, true );
     xhttp.setRequestHeader( 'Content-Type', 'application/json' );
 
-    const jsonString = JSON.stringify( json );
+    // sendToAddressStatuses.push( `XMLHttpRequest: curl ${url} -H "Content-Type: application/json" -d '${jsonString}'` );
+
     xhttp.send( jsonString );
 }
 
@@ -185,6 +187,7 @@ const getTransactionHistoryCallback = ( transactionHistory ) => {
             parsedTransaction.n = txIx;
             parsedTransaction.type = 'input';
             parsedTransaction.value = vinElt.value;
+            parsedTransaction.valueSat = vinElt.valueSat;
             parsedTransaction.address = vinElt.addr;
             parsedTransactionHistory.push( parsedTransaction );
         } );
@@ -194,6 +197,7 @@ const getTransactionHistoryCallback = ( transactionHistory ) => {
                 parsedTransaction.n = txIx;
                 parsedTransaction.type = 'output';
                 parsedTransaction.value = voutElt.value;
+                parsedTransaction.valueSat = voutElt.valueSat;
                 parsedTransaction.address = voutAddress;
                 parsedTransactionHistory.push( parsedTransaction );
             } );
@@ -262,10 +266,14 @@ const sendAmountToAddress = () => {
     console.log( 'sendAmountToAddress.unspentTransactionOutputs ' + JSON.stringify( unspentTransactionOutputs ) );
 
     const encodedTx = TxFactory.createSendToTx( privateKey, unspentTransactionOutputs, sendToAddress, sendAmount );
+    
+    if(encodedTx == undefined) {
+        return;
+    }
 
     const txUrl = `${ELA_RPC_URL_PREFIX}`;
 
-    const json = `{"method":"sendrawtransaction", "params": ["${encodedTx}"]}`;
+    const jsonString = `{"method":"sendrawtransaction", "params": ["${encodedTx}"]}`;
 
     console.log( 'sendAmountToAddress.encodedTx ' + JSON.stringify( encodedTx ) );
 
@@ -276,9 +284,9 @@ const sendAmountToAddress = () => {
     sendToAddressStatuses.length = 0;
     sendToAddressStatuses.push( JSON.stringify( encodedTx ) );
     sendToAddressStatuses.push( JSON.stringify( decodedTx ) );
-    sendToAddressStatuses.push( `Transaction Requested: curl ${txUrl} -H "Content-Type: application/json" -d '${json}'` );
+    sendToAddressStatuses.push( `Transaction Requested: curl ${txUrl} -H "Content-Type: application/json" -d '${jsonString}'` );
     renderApp();
-    postJson( ELA_RPC_URL_PREFIX, json, sendAmountToAddressReadyCallback, sendAmountToAddressErrorCallback );
+    postJson( ELA_RPC_URL_PREFIX, jsonString, sendAmountToAddressReadyCallback, sendAmountToAddressErrorCallback );
 }
 
 const requestTransactionHistory = () => {
@@ -458,10 +466,10 @@ class App extends React.Component {
                         parsedUnspentTransactionOutputs.map( function( item, key ) {
                             return ( <tr>
                                 <td>{item.utxoIx}</td>
-                                <td>{item.Txid}</td>
+                                <td class="break_all">{item.Txid}</td>
                                 <td>{item.Index}</td>
                                 <td>{item.Value}</td>
-                                <td>{item.ValueSats}</td>
+                                <td>{item.valueSats.toString(10)}</td>
                             </tr> )
                         } )
                     }
