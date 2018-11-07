@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Light Wallet for Elastos</title>
+<link type="text/css" href="style.css" rel="stylesheet">
+<style>
+.w800h600px {
+  width: 800px;
+  height: 600px;
+}
+
+.h20px {
+  height: 20px;
+}
+
+.h40px {
+  height: 20px;
+}
+
+.h230px {
+  height: 230px;
+}
+
+.w100pct {
+  width: 100%;
+}
+
+.white_on_purple {
+  background-color: purple;
+  color: white;
+}
+
+.black_on_white {
+  background-color: white;
+  color: black;
+}
+
+.white_on_gray {
+  background-color: lightgray;
+  color: white;
+}
+
+.gray_on_white {
+  background-color: white;
+  color: lightgray;
+}
+
+.valign_top {
+  vertical-align: top;
+}
+
+.no_padding {
+  padding: 0px 0px;
+}
+
+.no_border {
+  border: none;
+}
+
+.bordered {
+  border: solid;
+}
+
+.display_inline_block {
+  display: inline-block;
+}
+
+.float_right {
+  float: right;
+}
+</style>
+</head>
+<body>
+  <table class="w800h600px no_padding no_border">
+    <tr class="no_padding">
+      <td class="valign_top white_on_purple no_border" style="width: 150px;">
+        <table class="w100pct no_border">
+          <tr>
+            <td class="black_on_white h20px no_border">Elastos</td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h20px no_border"></td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h20px">Home</td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h20px">Send</td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h20px">Receive</td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h20px">Transactions</td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h40px no_border"></td>
+          </tr>
+          <tr>
+            <td class="black_on_white h20px no_border">Ledger</td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h230px no_border"></td>
+          </tr>
+          <tr>
+            <td class="white_on_purple h20px">Logout</td>
+          </tr>
+        </table>
+      </td>
+      <td class="valign_top black_on_white">
+        <table class="w100pct black_on_white">
+          <tr>
+            <td class="h230px"></td>
+          </tr>
+          <tr>
+            <td class="black_on_white h20px"><div class="gray_on_white">Ledger Status</div>
+              <p>Found USB Ledger Nano S Device. Elastos App found on hardware device. Click button to login.
+              <p>
+              <div class="white_on_gray bordered display_inline_block float_right">Use Ledger</div></td>
+          </tr>
+          <tr>
+            <td class="black_on_white h20px"><div class="gray_on_white">Private Key</div>
+              <p>Alternatively, enter private key manually.
+              <p>
+              <div class="white_on_gray bordered display_inline_block float_right">Use Ledger</div></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <div id="main"></div>
+</body>
+</html>
