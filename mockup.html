@@ -22,13 +22,26 @@
   height: 230px;
 }
 
+.h325px {
+  height: 325px;
+}
+
+.w490px {
+  width: 480px;
+}
+
 .w100pct {
   width: 100%;
 }
 
 .white_on_purple {
-  background-color: purple;
-  color: white;
+  background-color: #0E2F3B;
+  color: #FAFBFD;
+}
+
+.black_on_offwhite {
+  background-color: #FAFBFD;
+  color: black;
 }
 
 .black_on_white {
@@ -38,20 +51,46 @@
 
 .white_on_gray {
   background-color: lightgray;
-  color: white;
+  color: #FAFBFD;
+}
+
+.white_on_gray:hover {
+  background-color: #0E2F3B;
+  color: #FAFBFD;
+  border-color: lightgray;
+}
+
+.rounded {
+  border-radius: 15px;
 }
 
 .gray_on_white {
-  background-color: white;
-  color: lightgray;
+  background-color: #FAFBFD;
+  color: #C3CBD8;
+}
+
+.darkgray_border {
+  border-color: #979797;
 }
 
 .valign_top {
   vertical-align: top;
 }
 
+.valign_middle {
+  vertical-align: middle;
+}
+
+.text_align_center {
+  text-align: center;
+}
+
 .no_padding {
   padding: 0px 0px;
+}
+
+.padding_5px {
+  padding: 5px 5px;
 }
 
 .no_border {
@@ -69,6 +108,41 @@
 .float_right {
   float: right;
 }
+
+.float_left {
+  float: left;
+}
+
+.image_centered {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fake_button {
+  touch-action: manipulation;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+}
+
+.user_select_none {
+  user-select: none;
+}
+
+.user_select_none:hover {
+  cursor: default;
+}
+
+.branding_container {
+  float: left;
+  width: 490px;
+}
+
+.branding_image {
+  position: absolute;
+  top: 0;
+}
 </style>
 </head>
 <body>
@@ -77,53 +151,58 @@
       <td class="valign_top white_on_purple no_border" style="width: 150px;">
         <table class="w100pct no_border">
           <tr>
-            <td class="black_on_white h20px no_border">Elastos</td>
+            <td class="black_on_offwhite h20px no_border user_select_none"><img class="valign_middle" src="artwork/elastos-black-small.svg"> Elastos</td>
           </tr>
           <tr>
             <td class="white_on_purple h20px no_border"></td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px">Home</td>
+            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/home.svg"> Home</td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px">Send</td>
+            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/send.svg"> Send</td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px">Receive</td>
+            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/receive.svg"> Receive</td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px">Transactions</td>
+            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/transactions.svg"> Transactions</td>
           </tr>
           <tr>
             <td class="white_on_purple h40px no_border"></td>
           </tr>
           <tr>
-            <td class="black_on_white h20px no_border">Ledger</td>
+            <td class="black_on_offwhite h20px no_border">Ledger <img class="valign_middle float_right" src="artwork/ledger.svg"></td>
           </tr>
           <tr>
             <td class="white_on_purple h230px no_border"></td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px">Logout</td>
+            <td class="white_on_purple h20px fake_button">Logout</td>
           </tr>
         </table>
       </td>
-      <td class="valign_top black_on_white">
-        <table class="w100pct black_on_white">
+      <td class="valign_top black_on_offwhite no_border">
+        <table class="w490px black_on_offwhite no_border">
           <tr>
-            <td class="h230px"></td>
+            <td class="h325px no_border no_padding">
+              <div class="branding_container">
+                <img class="branding_image" src="artwork/elastos-branding.svg"><img style="left: 380px; top: 130px;" class="branding_image"
+                  src="artwork/elastos-white-large.svg">
+              </div>
+            </td>
           </tr>
           <tr>
-            <td class="black_on_white h20px"><div class="gray_on_white">Ledger Status</div>
+            <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Ledger Status</div>
               <p>Found USB Ledger Nano S Device. Elastos App found on hardware device. Click button to login.
               <p>
-              <div class="white_on_gray bordered display_inline_block float_right">Use Ledger</div></td>
+              <div class="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px">Use Ledger</div></td>
           </tr>
           <tr>
-            <td class="black_on_white h20px"><div class="gray_on_white">Private Key</div>
+            <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Private Key</div>
               <p>Alternatively, enter private key manually.
               <p>
-              <div class="white_on_gray bordered display_inline_block float_right">Use Ledger</div></td>
+              <div class="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px">Enter Key</div></td>
           </tr>
         </table>
       </td>

@@ -1,4 +1,19 @@
 /* Style the tab */
+@font-face {
+  font-family: "BioSans Light";
+  src: url("css/fonts/BioSans-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "BioSans Regular";
+  src: url("css/fonts/BioSans-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "BioSans Regular";
+  src: url("css/fonts/BioSans-SemiBold.otf") format("opentype");
+}
+
 .tab {
   overflow: hidden;
   border: 1px solid #ccc;
@@ -29,7 +44,7 @@
 table, tr, td, th {
   border: solid;
   border-width: 0.5px;
-  font-family: monospace;
+  font-family: BioSans;
   padding: 5px;
 }
 
