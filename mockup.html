@@ -159,7 +159,7 @@
 }
 </style>
 </head>
-<body>
+<body onload="onLoad()">
   <table class="w800h600px no_padding no_border">
     <tr class="no_padding">
       <td class="valign_top white_on_purple no_border" style="width: 150px;">
@@ -171,7 +171,7 @@
             <td class="white_on_purple h20px no_border"></td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/home.svg"> Home</td>
+            <td class="white_on_purple h20px fake_button" onclick="showHome()"><img class="valign_middle" src="artwork/home.svg"> Home</td>
           </tr>
           <tr>
             <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/send.svg"> Send</td>
@@ -192,7 +192,7 @@
             <td class="white_on_purple h230px no_border"></td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px fake_button">Logout</td>
+            <td class="white_on_purple h20px fake_button" onclick="showLogin()">Logout</td>
           </tr>
         </table>
       </td>
@@ -206,23 +206,23 @@
               </div>
             </td>
           </tr>
-          <tr>
+          <tr id="ledger-login">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Ledger Status</div>
               <p>Found USB Ledger Nano S Device. Elastos App found on hardware device. Click button to login.
               <p>
               <div class="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px">Use Ledger</div></td>
           </tr>
-          <tr>
+          <tr id="private-key-login">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Private Key</div>
               <p>Alternatively, enter private key manually.
               <p>
               <div class="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px">Enter Key</div></td>
           </tr>
-          <tr>
+          <tr id="your-address">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Your Address</div>
               <p>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</td>
           </tr>
-          <tr>
+          <tr  id="transaction-list">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white ` display_inline_block">Previous Transactions (2 total)</div>
               <div class="gray_on_white float_right display_inline_block">1234 Blocks</div>
               <p>
@@ -239,35 +239,35 @@
                 </tr>
               </table></td>
           </tr>
-          <tr>
+          <tr id="transaction-more-info">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">More Info</div>
               <p>Tap on the transaction ID to view further details or visit http://blockchain.elastos.org</td>
           </tr>
-          <tr>
+          <tr id="from-address">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">From Address</div>
               <p>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</td>
           </tr>
-          <tr>
+          <tr id="send-address">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Send Amount</div>
               <p>
                 <input type="text"> <input type="range" min="1" max="100" value="50"></td>
           </tr>
-          <tr>
+          <tr id="to-address">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">To Address</div>
               <p>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</td>
           </tr>
-          <tr>
+          <tr id="confirm-fees">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Confirm</div>
               <p>Tap ‘Next’ to confirm the fees for your transaction.
               <p>
               <div class="lightgray_border white_on_black bordered display_inline_block float_right fake_button rounded padding_5px">Next</div></td>
           </tr>
-          <tr>
+          <tr id="fees">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white display_inline_block">Fees</div>
               <div class="black_on_white float_right display_inline_block">Estimated New Balance</div>
               <p>
           </tr>
-          <tr>
+          <tr id="cancel-confirm-transaction">
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Confirm</div>
               <p>Your balance will be deducted 10.5 ELA + 0.000045 ELA in fees.
               <p>
@@ -278,6 +278,54 @@
       </td>
     </tr>
   </table>
-  <div id="main"></div>
+  <script>
+
+  const get = (id) => {
+    const elt = document.getElementById(id);
+    if(elt == null) {
+      throw new Error('elt is null:' + id);
+    }
+    return elt;
+  }
+  
+  const hide = (id) => {
+    get(id).style = 'display:none;';
+  }
+  
+  const show = (id) => {
+    get(id).style = 'display:default;';
+  }
+
+  const hideEverything = () => {
+    hide('cancel-confirm-transaction');
+    hide('fees');
+    hide('confirm-fees');
+    hide('to-address');
+    hide('send-address');
+    hide('from-address');
+    hide('transaction-more-info');
+    hide('transaction-list');
+    hide('your-address');
+    hide('private-key-login');
+    hide('ledger-login');
+  }
+  
+  const showLogin = () => {
+    hideEverything();
+    show('private-key-login');
+    show('ledger-login');
+  }
+  
+  const showHome = () => {
+    hideEverything();
+    show('transaction-more-info');
+    show('transaction-list');
+    show('your-address');
+  }
+  
+  const onLoad = () => {
+    showLogin();
+  }
+    </script>
 </body>
 </html>
