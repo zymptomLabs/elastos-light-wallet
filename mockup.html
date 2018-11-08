@@ -49,6 +49,11 @@
   color: black;
 }
 
+.white_on_black {
+  background-color: black;
+  color: white;
+}
+
 .white_on_gray {
   background-color: lightgray;
   color: #FAFBFD;
@@ -71,6 +76,10 @@
 
 .darkgray_border {
   border-color: #979797;
+}
+
+.lightgray_border {
+  border-color: lightgray;
 }
 
 .valign_top {
@@ -98,7 +107,8 @@
 }
 
 .bordered {
-  border: solid;
+  border-style: solid;
+  border-width: 0.5px;
 }
 
 .display_inline_block {
@@ -213,8 +223,7 @@
               <p>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</td>
           </tr>
           <tr>
-            <td class="black_on_white h20px darkgray_border"><div class="gray_on_white float_left display_inline_block">Previous Transactions (2
-                total)</div>
+            <td class="black_on_white h20px darkgray_border"><div class="gray_on_white ` display_inline_block">Previous Transactions (2 total)</div>
               <div class="gray_on_white float_right display_inline_block">1234 Blocks</div>
               <p>
               <table class="w100pct black_on_offwhite no_border whitespace_nowrap">
@@ -251,7 +260,19 @@
             <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Confirm</div>
               <p>Tap ‘Next’ to confirm the fees for your transaction.
               <p>
-              <div class="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px">Next</div></td>
+              <div class="lightgray_border white_on_black bordered display_inline_block float_right fake_button rounded padding_5px">Next</div></td>
+          </tr>
+          <tr>
+            <td class="black_on_white h20px darkgray_border"><div class="gray_on_white display_inline_block">Fees</div>
+              <div class="black_on_white float_right display_inline_block">Estimated New Balance</div>
+              <p>
+          </tr>
+          <tr>
+            <td class="black_on_white h20px darkgray_border"><div class="gray_on_white">Confirm</div>
+              <p>Your balance will be deducted 10.5 ELA + 0.000045 ELA in fees.
+              <p>
+              <div class="white_on_black lightgray_border bordered display_inline_block float_right fake_button rounded padding_5px">Confirm</div>
+              <div class="white_on_gray darkgray_border bordered display_inline_block float_right fake_button rounded padding_5px">Cancel</div></td>
           </tr>
         </table>
       </td>
