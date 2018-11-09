@@ -39,6 +39,21 @@
   color: #FAFBFD;
 }
 
+.white_on_light_purple {
+  background-color: #2A3D58;
+  color: #FAFBFD;
+}
+
+.white_on_purple_with_hover {
+  background-color: #0E2F3B;
+  color: #FAFBFD;
+}
+
+.white_on_purple_with_hover:hover {
+  background-color: #2A3D58;
+  color: #FAFBFD;
+}
+
 .black_on_offwhite {
   background-color: #FAFBFD;
   color: black;
@@ -171,16 +186,16 @@
             <td class="white_on_purple h20px no_border"></td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px fake_button" onclick="showHome()"><img class="valign_middle" src="artwork/home.svg"> Home</td>
+            <td id='home' class="white_on_purple_with_hover h20px fake_button" onclick="showHome()"><img class="valign_middle" src="artwork/home.svg"> Home</td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/send.svg"> Send</td>
+            <td class="white_on_purple_with_hover h20px fake_button"><img class="valign_middle" src="artwork/send.svg"> Send</td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/receive.svg"> Receive</td>
+            <td class="white_on_purple_with_hover h20px fake_button"><img class="valign_middle" src="artwork/receive.svg"> Receive</td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px fake_button"><img class="valign_middle" src="artwork/transactions.svg"> Transactions</td>
+            <td class="white_on_purple_with_hover h20px fake_button"><img class="valign_middle" src="artwork/transactions.svg"> Transactions</td>
           </tr>
           <tr>
             <td class="white_on_purple h40px no_border"></td>
@@ -192,7 +207,7 @@
             <td class="white_on_purple h230px no_border"></td>
           </tr>
           <tr>
-            <td class="white_on_purple h20px fake_button" onclick="showLogin()">Logout</td>
+            <td class="white_on_purple_with_hover h20px fake_button" onclick="showLogin()">Logout</td>
           </tr>
         </table>
       </td>
@@ -296,7 +311,17 @@
     get(id).style = 'display:default;';
   }
 
+  const removeClass = (id,cl) => {
+  	get(id).classList.remove(cl);
+  }
+  
+  const addClass = (id,cl) => {
+	get(id).classList.add(cl);
+  }
+
   const hideEverything = () => {
+    removeClass('home','white_on_light_purple');
+    addClass('home','white_on_purple_with_hover');
     hide('cancel-confirm-transaction');
     hide('fees');
     hide('confirm-fees');
@@ -321,6 +346,8 @@
     show('transaction-more-info');
     show('transaction-list');
     show('your-address');
+    addClass('home','white_on_light_purple');
+    removeClass('home','white_on_purple_with_hover');
   }
   
   const onLoad = () => {
