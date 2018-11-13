@@ -206,20 +206,20 @@ const getTransactionHistoryCallback = (transactionHistory) => {
   renderApp();
 }
 
-const hide = (id) => {
+const get = (id) => {
   const elt = document.getElementById(id);
   if (elt == null) {
-    alert(`hide:no elt with id \'${id}\'`)
+    throw new Error('elt is null:' + id);
   }
-  elt.style = 'display:none;';
+  return elt;
+}
+
+const hide = (id) => {
+  get(id).style = 'display:none;';
 }
 
 const show = (id) => {
-  const elt = document.getElementById(id);
-  if (elt == null) {
-    alert(`show:no elt with id \'${id}\'`)
-  }
-  elt.style = 'display:block;';
+  get(id).style = 'display:default;';
 }
 
 const getPublicKeyFromPrivateKey = () => {
@@ -299,6 +299,14 @@ const requestBalance = () => {
   const balanceUrl = `${BALANCE_URL_PREFIX}/${address}`;
   getJson(balanceUrl, getBalanceCallback);
 };
+
+const removeClass = (id, cl) => {
+  get(id).classList.remove(cl);
+}
+
+const addClass = (id, cl) => {
+  get(id).classList.add(cl);
+}
 
 const selectButton = (id) => {
   addClass(id, 'white_on_light_purple');
@@ -381,37 +389,37 @@ class App extends React.Component {
             <table class="w100pct no_border">
               <tr>
                 <td class="black_on_offwhite h20px no_border user_select_none">
-                  <img class="valign_middle" src="../artwork/elastos-black-small.svg"></img>
+                  <img class="valign_middle" src="artwork/elastos-black-small.svg"></img>
                   Elastos</td>
               </tr>
               <tr>
                 <td class="white_on_purple h20px no_border"></td>
               </tr>
               <tr>
-                <td id='home' class="white_on_purple_with_hover h20px fake_button" onClick={(e) =>showHome()}>
-                  <img class="valign_middle" src="../artwork/home.svg"></img>
+                <td id='home' class="white_on_purple_with_hover h20px fake_button" onClick={(e) => showHome()}>
+                  <img class="valign_middle" src="artwork/home.svg"></img>
                   Home</td>
               </tr>
               <tr>
-                <td id='send' class="white_on_purple_with_hover h20px fake_button"  onClick={(e) =>showSend()}>
-                  <img class="valign_middle" src="../artwork/send.svg"></img>
+                <td id='send' class="white_on_purple_with_hover h20px fake_button" onClick={(e) => showSend()}>
+                  <img class="valign_middle" src="artwork/send.svg"></img>
                   Send</td>
               </tr>
               <tr>
-                <td id='receive' class="white_on_purple_with_hover h20px fake_button" onClick={(e) =>showReceive()}>
-                  <img class="valign_middle" src="../artwork/receive.svg"></img>
+                <td id='receive' class="white_on_purple_with_hover h20px fake_button" onClick={(e) => showReceive()}>
+                  <img class="valign_middle" src="artwork/receive.svg"></img>
                   Receive</td>
               </tr>
               <tr>
-                <td id='transactions' class="white_on_purple_with_hover h20px fake_button" onClick={(e) =>showTransactions()}>
-                  <img class="valign_middle" src="../artwork/transactions.svg"></img>
+                <td id='transactions' class="white_on_purple_with_hover h20px fake_button" onClick={(e) => showTransactions()}>
+                  <img class="valign_middle" src="artwork/transactions.svg"></img>
                   Transactions</td>
               </tr>
               <tr>
                 <td class="white_on_purple h290px no_border"></td>
               </tr>
               <tr>
-                <td class="white_on_purple_with_hover h20px fake_button"  onClick={(e) =>showLogin()} >Logout</td>
+                <td class="white_on_purple_with_hover h20px fake_button" onClick={(e) => showLogin()}>Logout</td>
               </tr>
             </table>
           </td>
@@ -423,11 +431,11 @@ class App extends React.Component {
                     <img class="branding_image" style={{
                         left: '175px',
                         top: '10px'
-                      }} src="../artwork/elastos-branding.svg"></img>
+                      }} src="artwork/elastos-branding.svg"></img>
                     <img style={{
                         left: '380px',
                         top: '130px'
-                      }} class="branding_image" src="../artwork/elastos-white-large.svg"></img>
+                      }} class="branding_image" src="artwork/elastos-white-large.svg"></img>
                   </div>
                 </td>
               </tr>
@@ -464,14 +472,14 @@ class App extends React.Component {
                     <table class="w100pct black_on_offwhite no_border whitespace_nowrap">
                       <tr>
                         <td class="no_border no_padding">
-                          <img src="../artwork/received-ela.svg"></img>
+                          <img src="artwork/received-ela.svg"></img>
                         </td>
                         <td class="no_border no_padding">10.1 ELA</td>
                         <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                       </tr>
                       <tr>
                         <td class="no_border no_padding">
-                          <img src="../artwork/sent-ela.svg"></img>
+                          <img src="artwork/sent-ela.svg"></img>
                         </td>
                         <td class="no_border no_padding">1.1 ELA</td>
                         <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
@@ -489,168 +497,168 @@ class App extends React.Component {
                       <table class="w100pct black_on_offwhite no_border whitespace_nowrap">
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/received-ela.svg"></img>
+                            <img src="artwork/received-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">10.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
                         </tr>
                         <tr>
                           <td class="no_border no_padding">
-                            <img src="../artwork/sent-ela.svg"></img>
+                            <img src="artwork/sent-ela.svg"></img>
                           </td>
                           <td class="no_border no_padding">1.1 ELA</td>
                           <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
@@ -677,7 +685,7 @@ class App extends React.Component {
                   <div class="gray_on_white">Send Amount</div>
                   <p>
                     <input type="text"></input>
-                    <input type="range" min="1" max="100" value="50"></input>
+                    <input type="range" min="1" max="100"></input>
                   </p>
                 </td>
               </tr>
