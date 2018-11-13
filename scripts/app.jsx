@@ -388,22 +388,22 @@ class App extends React.Component {
                 <td class="white_on_purple h20px no_border"></td>
               </tr>
               <tr>
-                <td id='home' class="white_on_purple_with_hover h20px fake_button" onclick="showHome()">
+                <td id='home' class="white_on_purple_with_hover h20px fake_button" onClick={(e) =>showHome()}>
                   <img class="valign_middle" src="../artwork/home.svg"></img>
                   Home</td>
               </tr>
               <tr>
-                <td id='send' class="white_on_purple_with_hover h20px fake_button" onclick="showSend()">
+                <td id='send' class="white_on_purple_with_hover h20px fake_button"  onClick={(e) =>showSend()}>
                   <img class="valign_middle" src="../artwork/send.svg"></img>
                   Send</td>
               </tr>
               <tr>
-                <td id='receive' class="white_on_purple_with_hover h20px fake_button" onclick="showReceive()">
+                <td id='receive' class="white_on_purple_with_hover h20px fake_button" onClick={(e) =>showReceive()}>
                   <img class="valign_middle" src="../artwork/receive.svg"></img>
                   Receive</td>
               </tr>
               <tr>
-                <td id='transactions' class="white_on_purple_with_hover h20px fake_button" onclick="showTransactions()">
+                <td id='transactions' class="white_on_purple_with_hover h20px fake_button" onClick={(e) =>showTransactions()}>
                   <img class="valign_middle" src="../artwork/transactions.svg"></img>
                   Transactions</td>
               </tr>
@@ -411,7 +411,7 @@ class App extends React.Component {
                 <td class="white_on_purple h290px no_border"></td>
               </tr>
               <tr>
-                <td class="white_on_purple_with_hover h20px fake_button" onclick="showLogin()">Logout</td>
+                <td class="white_on_purple_with_hover h20px fake_button"  onClick={(e) =>showLogin()} >Logout</td>
               </tr>
             </table>
           </td>
