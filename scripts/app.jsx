@@ -300,25 +300,76 @@ const requestBalance = () => {
   getJson(balanceUrl, getBalanceCallback);
 };
 
-const showTab = (id) => {
-  const tabcontent = document.getElementsByClassName('tabcontent');
-  for (var i = 0; i < tabcontent.length; i++) {
-    hide(tabcontent[i].id);
-  }
-  show(id);
 
-  const tablinks = document.getElementsByClassName('tablinks');
-  for (var i = 0; i < tablinks.length; i++) {
-    if (tablinks[i].innerText == id) {
-      tablinks[i].className += ' active';
-    } else {
-      tablinks[i].className = tablinks[i].className.replace(' active', '');
-    }
-  }
-};
 
-const showDefaultTab = () => {
-  showTab('Home');
+const selectButton = (id) => {
+  addClass(id, 'white_on_light_purple');
+  removeClass(id, 'white_on_purple_with_hover');
+}
+
+const clearButtonSelection = (id) => {
+  removeClass(id, 'white_on_light_purple');
+  addClass(id, 'white_on_purple_with_hover');
+}
+
+const hideEverything = () => {
+  clearButtonSelection('send');
+  clearButtonSelection('home');
+  clearButtonSelection('receive');
+  clearButtonSelection('transactions');
+  hide('cancel-confirm-transaction');
+  hide('fees');
+  hide('confirm-and-see-fees');
+  hide('to-address');
+  hide('send-amount');
+  hide('from-address');
+  hide('transaction-more-info');
+  hide('transaction-list-small');
+  hide('transaction-list-large');
+  hide('your-address');
+  hide('private-key-login');
+  hide('ledger-login');
+  hide('elastos-branding');
+  hide('send-spacer-01');
+}
+
+const showLogin = () => {
+  hideEverything();
+  show('private-key-login');
+  show('ledger-login');
+  show('elastos-branding');
+}
+
+const showHome = () => {
+  hideEverything();
+  show('transaction-more-info');
+  show('transaction-list-small');
+  show('your-address');
+  show('elastos-branding');
+  selectButton('home');
+}
+
+const showSend = () => {
+  hideEverything();
+  show('from-address');
+  show('send-amount');
+  show('to-address');
+  show('confirm-and-see-fees');
+  show('send-spacer-01');
+  selectButton('send');
+}
+
+const showReceive = () => {
+  hideEverything();
+  show('your-address');
+  selectButton('receive');
+}
+
+const showTransactions = () => {
+  hideEverything();
+  show('transaction-more-info');
+  show('transaction-list-large');
+  selectButton('transactions');
 }
 
 class App extends React.Component {
@@ -670,7 +721,7 @@ const renderApp = () => {
   ReactDOM.render(<App/>, document.getElementById('main'));
 };
 const onLoad = () => {
-  showDefaultTab();
+  showLogin();
 }
 
 /** call initialization functions */
