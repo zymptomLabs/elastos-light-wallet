@@ -1,24 +1,24 @@
 "use strict";
 
 /** imports */
-const React = require( 'react' );
-const ReactDOM = require( 'react-dom' );
+const React = require('react');
+const ReactDOM = require('react-dom');
 
-const Row = require( 'react-bootstrap' ).Row;
-const Col = require( 'react-bootstrap' ).Col;
-const Grid = require( 'react-bootstrap' ).Grid;
-const Table = require( 'react-bootstrap' ).Table;
+const Row = require('react-bootstrap').Row;
+const Col = require('react-bootstrap').Col;
+const Grid = require('react-bootstrap').Grid;
+const Table = require('react-bootstrap').Table;
 
-const BigNumber = require( 'bignumber.js' );
+const BigNumber = require('bignumber.js');
 
-const LedgerComm = require( './LedgerComm.js' );
+const LedgerComm = require('./LedgerComm.js');
 
-const AddressTranscoder = require( './AddressTranscoder.js' )
-const KeyTranscoder = require( './KeyTranscoder.js' )
-const TxTranscoder = require( './TxTranscoder.js' )
-const TxSigner = require( './TxSigner.js' )
-const Asset = require( './Asset.js' )
-const TxFactory = require( './TxFactory.js' )
+const AddressTranscoder = require('./AddressTranscoder.js')
+const KeyTranscoder = require('./KeyTranscoder.js')
+const TxTranscoder = require('./TxTranscoder.js')
+const TxSigner = require('./TxSigner.js')
+const Asset = require('./Asset.js')
+const TxFactory = require('./TxFactory.js')
 
 /** global constants */
 
@@ -56,7 +56,7 @@ var pollDataTypeIx = 0;
 var balance = undefined;
 
 const sendToAddressStatuses = [];
-sendToAddressStatuses.push( 'No Send-To Transaction Requested Yet' );
+sendToAddressStatuses.push('No Send-To Transaction Requested Yet');
 
 var balanceStatus = 'No Balance Requested Yet';
 
@@ -70,420 +70,607 @@ const parsedUnspentTransactionOutputs = [];
 
 /** functions */
 
-const pollForDataCallback = ( message ) => {
-    ledgerDeviceInfo = message;
-    renderApp();
-    pollDataTypeIx++;
-    setPollForAllInfoTimer();
+const pollForDataCallback = (message) => {
+  ledgerDeviceInfo = message;
+  renderApp();
+  pollDataTypeIx++;
+  setPollForAllInfoTimer();
 }
 
 const pollForData = () => {
-    if ( LOG_LEDGER_POLLING ) {
-        console.log( 'getAllLedgerInfo ' + pollDataTypeIx );
-    }
-    var resetPollIndex = false;
-    switch ( pollDataTypeIx ) {
-        case 0:
-            pollForDataCallback( 'Polling...' );
-            break;
-        case 1:
-            const callback = () => {
-                alert( ledgerDeviceInfo );
-                renderApp();
-                pollForDataCallback();
-            }
-            LedgerComm.getLedgerDeviceInfo( pollForDataCallback );
-            break;
-        case MAX_POLL_DATA_TYPE_IX:
-            // only check every 10 seconds for a change in device status.
-            pollDataTypeIx = 0;
-            setTimeout( pollForData, 10000 );
-            break;
-        default:
-            throw Error( 'poll data index reset failed.' );
-    }
+  if (LOG_LEDGER_POLLING) {
+    console.log('getAllLedgerInfo ' + pollDataTypeIx);
+  }
+  var resetPollIndex = false;
+  switch (pollDataTypeIx) {
+    case 0:
+      pollForDataCallback('Polling...');
+      break;
+    case 1:
+      const callback = () => {
+        alert(ledgerDeviceInfo);
+        renderApp();
+        pollForDataCallback();
+      }
+      LedgerComm.getLedgerDeviceInfo(pollForDataCallback);
+      break;
+    case MAX_POLL_DATA_TYPE_IX:
+      // only check every 10 seconds for a change in device status.
+      pollDataTypeIx = 0;
+      setTimeout(pollForData, 10000);
+      break;
+    default:
+      throw Error('poll data index reset failed.');
+  }
 };
 
 const setPollForAllInfoTimer = () => {
-    setTimeout( pollForData, 1 );
+  setTimeout(pollForData, 1);
 }
 
-const postJson = ( url, jsonString, readyCallback, errorCallback ) => {
-    var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+const postJson = (url, jsonString, readyCallback, errorCallback) => {
+  var xmlhttp = new XMLHttpRequest(); // new HttpRequest instance
 
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if ( this.readyState == 4 ) {
-            // sendToAddressStatuses.push( `XMLHttpRequest: status:${this.status} response:'${this.response}'` );
-            if ( this.status == 200 ) {
-                readyCallback( JSON.parse( this.response ) );
-            } else {
-                errorCallback( this.response );
-            }
-        }
+  const xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4) {
+      // sendToAddressStatuses.push( `XMLHttpRequest: status:${this.status} response:'${this.response}'` );
+      if (this.status == 200) {
+        readyCallback(JSON.parse(this.response));
+      } else {
+        errorCallback(this.response);
+      }
     }
-    xhttp.responseType = 'text';
-    xhttp.open( 'POST', url, true );
-    xhttp.setRequestHeader( 'Content-Type', 'application/json' );
+  }
+  xhttp.responseType = 'text';
+  xhttp.open('POST', url, true);
+  xhttp.setRequestHeader('Content-Type', 'application/json');
 
-    // sendToAddressStatuses.push( `XMLHttpRequest: curl ${url} -H "Content-Type: application/json" -d '${jsonString}'` );
+  // sendToAddressStatuses.push( `XMLHttpRequest: curl ${url} -H "Content-Type: application/json" -d '${jsonString}'` );
 
-    xhttp.send( jsonString );
+  xhttp.send(jsonString);
 }
 
-const getJson = ( url, callback ) => {
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if ( this.readyState == 4 && this.status == 200 ) {
-            callback( JSON.parse( this.response ) );
-        }
+const getJson = (url, callback) => {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      callback(JSON.parse(this.response));
     }
-    xhttp.responseType = 'text';
-    xhttp.open( 'GET', url, true );
-    xhttp.send();
+  }
+  xhttp.responseType = 'text';
+  xhttp.open('GET', url, true);
+  xhttp.send();
 }
 
-const getBalanceCallback = ( balanceResponse ) => {
-    balanceStatus = `Balance Received:${balanceResponse.Desc} ${balanceResponse.Error} `;
-    balance = balanceResponse.Result;
+const getBalanceCallback = (balanceResponse) => {
+  balanceStatus = `Balance Received:${balanceResponse.Desc} ${balanceResponse.Error} `;
+  balance = balanceResponse.Result;
 
-    renderApp();
+  renderApp();
 }
-
 
 const requestUnspentTransactionOutputs = () => {
-    unspentTransactionOutputsStatus = 'UTXOs Requested';
-    const unspentTransactionOutputsUrl = `${TX_UTXO_URL_PREFIX}/${address}/${Asset.elaAssetId}`;
+  unspentTransactionOutputsStatus = 'UTXOs Requested';
+  const unspentTransactionOutputsUrl = `${TX_UTXO_URL_PREFIX}/${address}/${Asset.elaAssetId}`;
 
-    // console.log( 'unspentTransactionOutputsUrl ' + unspentTransactionOutputsUrl );
+  // console.log( 'unspentTransactionOutputsUrl ' + unspentTransactionOutputsUrl );
 
-    getJson( unspentTransactionOutputsUrl, getUnspentTransactionOutputsCallback );
+  getJson(unspentTransactionOutputsUrl, getUnspentTransactionOutputsCallback);
 };
 
-const getUnspentTransactionOutputsCallback = ( response ) => {
-    unspentTransactionOutputsStatus = 'UTXOs Received';
-    parsedUnspentTransactionOutputs.length = 0;
+const getUnspentTransactionOutputsCallback = (response) => {
+  unspentTransactionOutputsStatus = 'UTXOs Received';
+  parsedUnspentTransactionOutputs.length = 0;
 
-    console.log( 'getUnspentTransactionOutputsCallback ' + JSON.stringify( response ) );
+  console.log('getUnspentTransactionOutputsCallback ' + JSON.stringify(response));
 
-    response.Result.forEach(( utxo, utxoIx ) => {
-        const valueBigNumber = BigNumber( utxo.Value, 10 );
+  response.Result.forEach((utxo, utxoIx) => {
+    const valueBigNumber = BigNumber(utxo.Value, 10);
 
-        utxo.utxoIx = utxoIx;
-        utxo.valueSats = valueBigNumber.times( Asset.satoshis );
+    utxo.utxoIx = utxoIx;
+    utxo.valueSats = valueBigNumber.times(Asset.satoshis);
 
-        parsedUnspentTransactionOutputs.push( utxo );
-    } );
+    parsedUnspentTransactionOutputs.push(utxo);
+  });
 
-    renderApp();
+  renderApp();
 }
 
-const getTransactionHistoryCallback = ( transactionHistory ) => {
-    transactionHistoryStatus = 'History Received';
-    parsedTransactionHistory.length = 0;
-    transactionHistory.txs.forEach(( tx, txIx ) => {
-        tx.vin.forEach(( vinElt ) => {
-            const parsedTransaction = {};
-            parsedTransaction.n = txIx;
-            parsedTransaction.type = 'input';
-            parsedTransaction.value = vinElt.value;
-            parsedTransaction.valueSat = vinElt.valueSat;
-            parsedTransaction.address = vinElt.addr;
-            parsedTransactionHistory.push( parsedTransaction );
-        } );
-        tx.vout.forEach(( voutElt ) => {
-            voutElt.scriptPubKey.addresses.forEach(( voutAddress ) => {
-                const parsedTransaction = {};
-                parsedTransaction.n = txIx;
-                parsedTransaction.type = 'output';
-                parsedTransaction.value = voutElt.value;
-                parsedTransaction.valueSat = voutElt.valueSat;
-                parsedTransaction.address = voutAddress;
-                parsedTransactionHistory.push( parsedTransaction );
-            } );
-        } );
-    } );
+const getTransactionHistoryCallback = (transactionHistory) => {
+  transactionHistoryStatus = 'History Received';
+  parsedTransactionHistory.length = 0;
+  transactionHistory.txs.forEach((tx, txIx) => {
+    tx.vin.forEach((vinElt) => {
+      const parsedTransaction = {};
+      parsedTransaction.n = txIx;
+      parsedTransaction.type = 'input';
+      parsedTransaction.value = vinElt.value;
+      parsedTransaction.valueSat = vinElt.valueSat;
+      parsedTransaction.address = vinElt.addr;
+      parsedTransactionHistory.push(parsedTransaction);
+    });
+    tx.vout.forEach((voutElt) => {
+      voutElt.scriptPubKey.addresses.forEach((voutAddress) => {
+        const parsedTransaction = {};
+        parsedTransaction.n = txIx;
+        parsedTransaction.type = 'output';
+        parsedTransaction.value = voutElt.value;
+        parsedTransaction.valueSat = voutElt.valueSat;
+        parsedTransaction.address = voutAddress;
+        parsedTransactionHistory.push(parsedTransaction);
+      });
+    });
+  });
 
-    renderApp();
+  renderApp();
 }
 
-const hide = ( id ) => {
-    const elt = document.getElementById( id );
-    if ( elt == null ) {
-        alert( `hide:no elt with id \'${id}\'` )
-    }
-    elt.style = 'display:none;';
+const hide = (id) => {
+  const elt = document.getElementById(id);
+  if (elt == null) {
+    alert(`hide:no elt with id \'${id}\'`)
+  }
+  elt.style = 'display:none;';
 }
 
-const show = ( id ) => {
-    const elt = document.getElementById( id );
-    if ( elt == null ) {
-        alert( `show:no elt with id \'${id}\'` )
-    }
-    elt.style = 'display:block;';
+const show = (id) => {
+  const elt = document.getElementById(id);
+  if (elt == null) {
+    alert(`show:no elt with id \'${id}\'`)
+  }
+  elt.style = 'display:block;';
 }
 
 const getPublicKeyFromPrivateKey = () => {
-    show( 'privateKey' );
-    const privateKeyElt = document.getElementById( 'privateKey' );
-    const privateKey = privateKeyElt.value;
-    if ( privateKey.length != PRIVATE_KEY_LENGTH ) {
-        alert( `private key must be a hex encoded string of length ${PRIVATE_KEY_LENGTH}, not ${privateKey.length}` );
-        return;
-    }
-    publicKey = KeyTranscoder.getPublic( privateKey );
-    address = AddressTranscoder.getAddressFromPublicKey( publicKey );
+  show('privateKey');
+  const privateKeyElt = document.getElementById('privateKey');
+  const privateKey = privateKeyElt.value;
+  if (privateKey.length != PRIVATE_KEY_LENGTH) {
+    alert(`private key must be a hex encoded string of length ${PRIVATE_KEY_LENGTH}, not ${privateKey.length}`);
+    return;
+  }
+  publicKey = KeyTranscoder.getPublic(privateKey);
+  address = AddressTranscoder.getAddressFromPublicKey(publicKey);
 
-    hide( 'privateKey' );
-    hide( 'privateKeyButton' );
-    renderApp();
+  hide('privateKey');
+  hide('privateKeyButton');
+  renderApp();
 
-    requestTransactionHistory();
-    requestBalance();
-    requestUnspentTransactionOutputs();
+  requestTransactionHistory();
+  requestBalance();
+  requestUnspentTransactionOutputs();
 }
 
-const sendAmountToAddressErrorCallback = ( error ) => {
-    sendToAddressStatuses.push( JSON.stringify( error ) );
-    renderApp();
+const sendAmountToAddressErrorCallback = (error) => {
+  sendToAddressStatuses.push(JSON.stringify(error));
+  renderApp();
 }
 
-const sendAmountToAddressReadyCallback = ( transactionJson ) => {
-    sendToAddressStatuses.push( JSON.stringify( transactionJson ) );
-    renderApp();
+const sendAmountToAddressReadyCallback = (transactionJson) => {
+  sendToAddressStatuses.push(JSON.stringify(transactionJson));
+  renderApp();
 }
 
 const sendAmountToAddress = () => {
-    const sendToAddressElt = document.getElementById( 'sendToAddress' );
-    const sendAmountElt = document.getElementById( 'sendAmount' );
-    const privateKeyElt = document.getElementById( 'privateKey' );
+  const sendToAddressElt = document.getElementById('sendToAddress');
+  const sendAmountElt = document.getElementById('sendAmount');
+  const privateKeyElt = document.getElementById('privateKey');
 
-    const sendToAddress = sendToAddressElt.value;
-    const sendAmount = sendAmountElt.value;
-    const privateKey = privateKeyElt.value;
+  const sendToAddress = sendToAddressElt.value;
+  const sendAmount = sendAmountElt.value;
+  const privateKey = privateKeyElt.value;
 
-    const unspentTransactionOutputs = parsedUnspentTransactionOutputs;
-    console.log( 'sendAmountToAddress.unspentTransactionOutputs ' + JSON.stringify( unspentTransactionOutputs ) );
+  const unspentTransactionOutputs = parsedUnspentTransactionOutputs;
+  console.log('sendAmountToAddress.unspentTransactionOutputs ' + JSON.stringify(unspentTransactionOutputs));
 
-    const encodedTx = TxFactory.createSendToTx( privateKey, unspentTransactionOutputs, sendToAddress, sendAmount );
-    
-    if(encodedTx == undefined) {
-        return;
-    }
+  const encodedTx = TxFactory.createSendToTx(privateKey, unspentTransactionOutputs, sendToAddress, sendAmount);
 
-    const txUrl = `${ELA_RPC_URL_PREFIX}`;
+  if (encodedTx == undefined) {
+    return;
+  }
 
-    const jsonString = `{"method":"sendrawtransaction", "params": ["${encodedTx}"]}`;
+  const txUrl = `${ELA_RPC_URL_PREFIX}`;
 
-    console.log( 'sendAmountToAddress.encodedTx ' + JSON.stringify( encodedTx ) );
+  const jsonString = `{"method":"sendrawtransaction", "params": ["${encodedTx}"]}`;
 
-    const decodedTx = TxTranscoder.decodeTx( Buffer.from( encodedTx, 'hex' ) );
+  console.log('sendAmountToAddress.encodedTx ' + JSON.stringify(encodedTx));
 
-    console.log( 'sendAmountToAddress.decodedTx ' + JSON.stringify( decodedTx ) );
+  const decodedTx = TxTranscoder.decodeTx(Buffer.from(encodedTx, 'hex'));
 
-    sendToAddressStatuses.length = 0;
-    sendToAddressStatuses.push( JSON.stringify( encodedTx ) );
-    sendToAddressStatuses.push( JSON.stringify( decodedTx ) );
-    sendToAddressStatuses.push( `Transaction Requested: curl ${txUrl} -H "Content-Type: application/json" -d '${jsonString}'` );
-    renderApp();
-    postJson( ELA_RPC_URL_PREFIX, jsonString, sendAmountToAddressReadyCallback, sendAmountToAddressErrorCallback );
+  console.log('sendAmountToAddress.decodedTx ' + JSON.stringify(decodedTx));
+
+  sendToAddressStatuses.length = 0;
+  sendToAddressStatuses.push(JSON.stringify(encodedTx));
+  sendToAddressStatuses.push(JSON.stringify(decodedTx));
+  sendToAddressStatuses.push(`Transaction Requested: curl ${txUrl} -H "Content-Type: application/json" -d '${jsonString}'`);
+  renderApp();
+  postJson(ELA_RPC_URL_PREFIX, jsonString, sendAmountToAddressReadyCallback, sendAmountToAddressErrorCallback);
 }
 
 const requestTransactionHistory = () => {
-    transactionHistoryStatus = 'History Requested';
-    const transactionHistoryUrl = TX_HISTORY_URL_PREFIX + address;
-    getJson( transactionHistoryUrl, getTransactionHistoryCallback );
+  transactionHistoryStatus = 'History Requested';
+  const transactionHistoryUrl = TX_HISTORY_URL_PREFIX + address;
+  getJson(transactionHistoryUrl, getTransactionHistoryCallback);
 };
 
 const requestBalance = () => {
-    balanceStatus = 'History Requested';
-    const balanceUrl = `${BALANCE_URL_PREFIX}/${address}`;
-    getJson( balanceUrl, getBalanceCallback );
+  balanceStatus = 'History Requested';
+  const balanceUrl = `${BALANCE_URL_PREFIX}/${address}`;
+  getJson(balanceUrl, getBalanceCallback);
 };
 
-const showTab = ( id ) => {
-    const tabcontent = document.getElementsByClassName( 'tabcontent' );
-    for ( var i = 0; i < tabcontent.length; i++ ) {
-        hide( tabcontent[i].id );
-    }
-    show( id );
+const showTab = (id) => {
+  const tabcontent = document.getElementsByClassName('tabcontent');
+  for (var i = 0; i < tabcontent.length; i++) {
+    hide(tabcontent[i].id);
+  }
+  show(id);
 
-    const tablinks = document.getElementsByClassName( 'tablinks' );
-    for ( var i = 0; i < tablinks.length; i++ ) {
-        if ( tablinks[i].innerText == id ) {
-            tablinks[i].className += ' active';
-        } else {
-            tablinks[i].className = tablinks[i].className.replace( ' active', '' );
-        }
+  const tablinks = document.getElementsByClassName('tablinks');
+  for (var i = 0; i < tablinks.length; i++) {
+    if (tablinks[i].innerText == id) {
+      tablinks[i].className += ' active';
+    } else {
+      tablinks[i].className = tablinks[i].className.replace(' active', '');
     }
+  }
 };
 
 const showDefaultTab = () => {
-    showTab( 'Home' );
+  showTab('Home');
 }
 
 class App extends React.Component {
-    render() {
-        return ( <div id="tabcontainer">
-            <div class="tab">
-                <button class="tablinks" onClick={( e ) => showTab( 'Home' )}>Home</button>
-                <button class="tablinks" onClick={( e ) => showTab( 'Send' )}>Send</button>
-                <button class="tablinks" onClick={( e ) => showTab( 'Receive' )}>Receive</button>
-                <button class="tablinks" onClick={( e ) => showTab( 'Transactions' )}>Transactions</button>
-            </div>
-            <div id="Home" class="tabcontent outlined">
-                <b>Ledger Device Info</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <code>{ledgerDeviceInfo}</code>
-                    <code>&nbsp;</code>
-                </p>
-                <b>Private Key</b>
-                <p style={{
-                    height: '12px'
-                }}>
-                    <input style={{
-                        fontFamily: 'monospace'
-                    }} type="text" size="64" id="privateKey" placeholder="Private Key"></input>
-                </p>
-                <p>
-                    <button id="privateKeyButton" onClick={( e ) => getPublicKeyFromPrivateKey()}>Use Private Key</button>
-                </p>
-            </div>
-            <div id="Send" class="tabcontent outlined">
-                <b>Send To Address</b>
-                <p style={{
-                    height: '12px'
-                }}>
-                    <input style={{
-                        fontFamily: 'monospace'
-                    }} type="text" size="64" id="sendToAddress" placeholder="Send To Address"></input>
-                </p>
-                <b>Amount</b>
-                <p style={{
-                    height: '12px'
-                }}>
-                    <input style={{
-                        fontFamily: 'monospace'
-                    }} type="text" size="64" id="sendAmount" placeholder="Send Amount"></input>
-                </p>
-                <p>
-                    <button onClick={( e ) => sendAmountToAddress()}>Send Amount To Address</button>
-                </p>
-                <b>Send To Address Status</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <table>
-                        <tr>
-                            <th>Status</th>
-                        </tr>
-
-                        {
-                            sendToAddressStatuses.map(( sendToAddressStatus, key ) => {
-                                return ( <tr>
-                                    <td>{sendToAddressStatus}</td>
-                                </tr> )
-                            } )
-                        }
+  render() {
+    return (<div>
+      <table class="w800h600px no_padding no_border">
+        <tr class="no_padding">
+          <td class="valign_top white_on_purple no_border" style="width: 150px;">
+            <table class="w100pct no_border">
+              <tr>
+                <td class="black_on_offwhite h20px no_border user_select_none">
+                  <img class="valign_middle" src="../artwork/elastos-black-small.svg"></img>
+                  Elastos</td>
+              </tr>
+              <tr>
+                <td class="white_on_purple h20px no_border"></td>
+              </tr>
+              <tr>
+                <td id='home' class="white_on_purple_with_hover h20px fake_button" onclick="showHome()">
+                  <img class="valign_middle" src="../artwork/home.svg"></img>
+                  Home</td>
+              </tr>
+              <tr>
+                <td id='send' class="white_on_purple_with_hover h20px fake_button" onclick="showSend()">
+                  <img class="valign_middle" src="../artwork/send.svg"></img>
+                  Send</td>
+              </tr>
+              <tr>
+                <td id='receive' class="white_on_purple_with_hover h20px fake_button" onclick="showReceive()">
+                  <img class="valign_middle" src="../artwork/receive.svg"></img>
+                  Receive</td>
+              </tr>
+              <tr>
+                <td id='transactions' class="white_on_purple_with_hover h20px fake_button" onclick="showTransactions()">
+                  <img class="valign_middle" src="../artwork/transactions.svg"></img>
+                  Transactions</td>
+              </tr>
+              <tr>
+                <td class="white_on_purple h290px no_border"></td>
+              </tr>
+              <tr>
+                <td class="white_on_purple_with_hover h20px fake_button" onclick="showLogin()">Logout</td>
+              </tr>
+            </table>
+          </td>
+          <td class="valign_top black_on_offwhite no_border no_padding">
+            <table class="w626px black_on_offwhite no_border no_padding">
+              <tr id="elastos-branding" class="no_border no_padding">
+                <td class="h325px w595px no_border no_padding">
+                  <div class="branding_container">
+                    <img class="branding_image" style="left: 175px; top: 10px;" src="../artwork/elastos-branding.svg"></img>
+                    <img style="left: 380px; top: 130px;" class="branding_image" src="../artwork/elastos-white-large.svg"></img>
+                  </div>
+                </td>
+              </tr>
+              <tr id="ledger-login">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">Ledger Status</div>
+                  <p>Found USB Ledger Nano S Device. Elastos App found on hardware device. Click button to login.
+                  </p>
+                  <p>
+                    <div class="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px">Use Ledger</div>
+                  </p>
+                </td>
+              </tr>
+              <tr id="private-key-login">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">Private Key</div>
+                  <p>Alternatively, enter private key manually.</p>
+                  <p>
+                    <div class="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px">Enter Key</div>
+                  </p>
+                </td>
+              </tr>
+              <tr id="your-address">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">Your Address</div>
+                  <br>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</br>
+                </td>
+              </tr>
+              <tr id="transaction-list-small">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white ` display_inline_block">Previous Transactions (2 total)</div>
+                  <div class="gray_on_white float_right display_inline_block">1234 Blocks</div>
+                  <p>
+                    <table class="w100pct black_on_offwhite no_border whitespace_nowrap">
+                      <tr>
+                        <td class="no_border no_padding">
+                          <img src="../artwork/received-ela.svg"></img>
+                        </td>
+                        <td class="no_border no_padding">10.1 ELA</td>
+                        <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                      </tr>
+                      <tr>
+                        <td class="no_border no_padding">
+                          <img src="../artwork/sent-ela.svg"></img>
+                        </td>
+                        <td class="no_border no_padding">1.1 ELA</td>
+                        <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                      </tr>
                     </table>
-                </p>
-
-            </div>
-            <div id="Receive" class="tabcontent outlined">
-                <b>Public Key</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <code>{publicKey}</code>
-                    <code>&nbsp;</code>
-                </p>
-                <b>Address</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <code>{address}</code>
-                    <code>&nbsp;</code>
-                </p>
-                <b>Balance Status</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <code>{balanceStatus}</code>
-                    <code>&nbsp;</code>
-                </p>
-                <b>Balance</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <code>{balance}</code>
-                    <code>&nbsp;</code>
-                </p>
-            </div>
-            <div id="Transactions" class="tabcontent outlined">
-                <b>Transaction History</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <code>Status:{transactionHistoryStatus}</code>
-                </p>
-                <table>
-                    <tr>
-                        <th>TX Number</th>
-                        <th>Value Type</th>
-                        <th>Address</th>
-                        <th>Value (ELA)</th>
-                        <th>Value (Sats)</th>
-                    </tr>
-                    {
-                        parsedTransactionHistory.map( function( item, key ) {
-                            return ( <tr>
-                                <td>{item.n}</td>
-                                <td>{item.type}</td>
-                                <td>{item.address}</td>
-                                <td>{item.value}</td>
-                                <td>{item.valueSat}</td>
-                            </tr> )
-                        } )
-                    }
-                </table>
-                <b>Unspent Transaction Outputs</b>
-                <p style={{
-                    wordBreak: 'break-all'
-                }}>
-                    <code>Status:{unspentTransactionOutputsStatus}</code>
-                </p>
-                <table>
-                    <tr>
-                        <th>utxoIx</th>
-                        <th>Txid</th>
-                        <th>Index</th>
-                        <th>Value (ELA)</th>
-                        <th>Value (Sats)</th>
-                    </tr>
-                    {
-                        parsedUnspentTransactionOutputs.map( function( item, key ) {
-                            return ( <tr>
-                                <td>{item.utxoIx}</td>
-                                <td class="break_all">{item.Txid}</td>
-                                <td>{item.Index}</td>
-                                <td>{item.Value}</td>
-                                <td>{item.valueSats.toString(10)}</td>
-                            </tr> )
-                        } )
-                    }
-                </table>
-            </div>
-        </div> )
-    }
+                  </p>
+                </td>
+              </tr>
+              <tr id="transaction-list-large">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white ` display_inline_block">Previous Transactions (22 total)</div>
+                  <div class="gray_on_white float_right display_inline_block">1234 Blocks</div>
+                  <p>
+                    <div class="h470px overflow_auto">
+                      <table class="w100pct black_on_offwhite no_border whitespace_nowrap">
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/received-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">10.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                        <tr>
+                          <td class="no_border no_padding">
+                            <img src="../artwork/sent-ela.svg"></img>
+                          </td>
+                          <td class="no_border no_padding">1.1 ELA</td>
+                          <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </p>
+                </td>
+              </tr>
+              <tr id="transaction-more-info">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">More Info</div>
+                  <br>Tap on the transaction ID to view further details or visit http://blockchain.elastos.org
+                  </br>
+                </td>
+              </tr>
+              <tr id="from-address">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">From Address</div>
+                  <p>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</p>
+                </td>
+              </tr>
+              <tr id="send-amount">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">Send Amount</div>
+                  <p>
+                    <input type="text"></input>
+                    <input type="range" min="1" max="100" value="50"></input>
+                  </p>
+                </td>
+              </tr>
+              <tr id="to-address">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">To Address</div>
+                  <p>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</p>
+                </td>
+              </tr>
+              <tr id="send-spacer-01">
+                <td class="black_on_white h200px no_border"></td>
+              </tr>
+              <tr id="confirm-and-see-fees">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">Confirm</div>
+                  <p>Tap ‘Next’ to confirm the fees for your transaction.</p>
+                  <p>
+                    <div class="lightgray_border white_on_black bordered display_inline_block float_right fake_button rounded padding_5px">Next</div>
+                  </p>
+                </td>
+              </tr>
+              <tr id="fees">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white display_inline_block">Fees</div>
+                  <div class="black_on_white float_right display_inline_block">Estimated New Balance</div>
+                </td>
+              </tr>
+              <tr id="cancel-confirm-transaction">
+                <td class="black_on_white h20px darkgray_border">
+                  <div class="gray_on_white">Confirm</div>
+                  <p>Your balance will be deducted 10.5 ELA + 0.000045 ELA in fees.</p>
+                  <p>
+                    <div class="white_on_black lightgray_border bordered display_inline_block float_right fake_button rounded padding_5px">Confirm</div>
+                    <div class="white_on_gray darkgray_border bordered display_inline_block float_right fake_button rounded padding_5px">Cancel</div>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>)
+  }
 }
 const renderApp = () => {
-    ReactDOM.render( <App />, document.getElementById( 'main' ) );
+  ReactDOM.render(<App/>, document.getElementById('main'));
 };
-
 const onLoad = () => {
-    showDefaultTab();
+  showDefaultTab();
 }
 
 /** call initialization functions */
