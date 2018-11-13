@@ -468,24 +468,23 @@ class App extends React.Component {
                 <td class="black_on_white h20px darkgray_border">
                   <div class="gray_on_white ` display_inline_block">Previous Transactions (2 total)</div>
                   <div class="gray_on_white float_right display_inline_block">1234 Blocks</div>
-                  <p>
-                    <table class="w100pct black_on_offwhite no_border whitespace_nowrap">
-                      <tr>
-                        <td class="no_border no_padding">
-                          <img src="artwork/received-ela.svg"></img>
-                        </td>
-                        <td class="no_border no_padding">10.1 ELA</td>
-                        <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
-                      </tr>
-                      <tr>
-                        <td class="no_border no_padding">
-                          <img src="artwork/sent-ela.svg"></img>
-                        </td>
-                        <td class="no_border no_padding">1.1 ELA</td>
-                        <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
-                      </tr>
-                    </table>
-                  </p>
+                  <br/>
+                  <table class="w100pct black_on_offwhite no_border whitespace_nowrap">
+                    <tr>
+                      <td class="no_border no_padding">
+                        <img src="artwork/received-ela.svg"></img>
+                      </td>
+                      <td class="no_border no_padding">10.1 ELA</td>
+                      <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                    </tr>
+                    <tr>
+                      <td class="no_border no_padding">
+                        <img src="artwork/sent-ela.svg"></img>
+                      </td>
+                      <td class="no_border no_padding">1.1 ELA</td>
+                      <td class="no_border no_padding">160cae1e19ef4e8901793259eef07148f35b6fcf3dfd8d7bd82eb2664db04d98</td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
               <tr id="transaction-list-large">
