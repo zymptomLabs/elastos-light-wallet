@@ -300,8 +300,6 @@ const requestBalance = () => {
   getJson(balanceUrl, getBalanceCallback);
 };
 
-
-
 const selectButton = (id) => {
   addClass(id, 'white_on_light_purple');
   removeClass(id, 'white_on_purple_with_hover');
@@ -377,7 +375,9 @@ class App extends React.Component {
     return (<div>
       <table class="w800h600px no_padding no_border">
         <tr class="no_padding">
-          <td class="valign_top white_on_purple no_border" style="width: 150px;">
+          <td class="valign_top white_on_purple no_border" style={{
+              width: '150px'
+            }}>
             <table class="w100pct no_border">
               <tr>
                 <td class="black_on_offwhite h20px no_border user_select_none">
@@ -420,8 +420,14 @@ class App extends React.Component {
               <tr id="elastos-branding" class="no_border no_padding">
                 <td class="h325px w595px no_border no_padding">
                   <div class="branding_container">
-                    <img class="branding_image" style="left: 175px; top: 10px;" src="../artwork/elastos-branding.svg"></img>
-                    <img style="left: 380px; top: 130px;" class="branding_image" src="../artwork/elastos-white-large.svg"></img>
+                    <img class="branding_image" style={{
+                        left: '175px',
+                        top: '10px'
+                      }} src="../artwork/elastos-branding.svg"></img>
+                    <img style={{
+                        left: '380px',
+                        top: '130px'
+                      }} class="branding_image" src="../artwork/elastos-white-large.svg"></img>
                   </div>
                 </td>
               </tr>
@@ -447,7 +453,7 @@ class App extends React.Component {
               <tr id="your-address">
                 <td class="black_on_white h20px darkgray_border">
                   <div class="gray_on_white">Your Address</div>
-                  <br>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt</br>
+                  <br/>EbDbMuMQcNhuyuyJdJT2DqN38bxiApQRgt
                 </td>
               </tr>
               <tr id="transaction-list-small">
@@ -657,8 +663,7 @@ class App extends React.Component {
               <tr id="transaction-more-info">
                 <td class="black_on_white h20px darkgray_border">
                   <div class="gray_on_white">More Info</div>
-                  <br>Tap on the transaction ID to view further details or visit http://blockchain.elastos.org
-                  </br>
+                  <br/>Tap on the transaction ID to view further details or visit http://blockchain.elastos.org
                 </td>
               </tr>
               <tr id="from-address">
