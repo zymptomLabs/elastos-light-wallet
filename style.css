@@ -14,6 +14,51 @@
   src: url("css/fonts/BioSans-SemiBold.otf") format("opentype");
 }
 
+.border_radius30px {
+  border-radius: 30px;
+  padding: 30px;
+}
+
+.lower_border_radius30px {
+  border-radius: 0px 0px 30px 30px;
+  padding: 30px;
+}
+
+.margin20px {
+  margin: 20px;
+}
+
+.white_link {
+  color: white;
+  text-decoration: none;
+}
+
+.white_link_with_hover {
+  color: white;
+  text-decoration: none;
+}
+
+.white_link_with_hover:hover {
+  color: white;
+  background-color: #333;
+  text-decoration: none;
+}
+
+.gray_bg24_fg5A {
+  background-color: #242424;
+  color: #5a5a5a;
+}
+
+.gray_bg28_fg5A {
+  background-color: #282828;
+  color: #5a5a5a;
+}
+
+.gray_bg41_fg5A {
+  background-color: #414141;
+  color: #5a5a5a;
+}
+
 .tab {
   overflow: hidden;
   border: 1px solid #ccc;
@@ -115,6 +160,26 @@ p {
 
 .w595px {
   width: 500px;
+}
+
+.w10pct {
+  width: 10%;
+}
+
+.w20pct {
+  width: 20%;
+}
+
+.w30pct {
+  width: 30%;
+}
+
+.w40pct {
+  width: 40%;
+}
+
+.w60pct {
+  width: 60%;
 }
 
 .w100pct {

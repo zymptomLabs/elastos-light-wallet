@@ -1099,82 +1099,25 @@ const ProducerSelectionButtonText = (props) => {
   }
 }
 
-const onLinkClick = (event, href) => {
+const onLinkClick = (event) => {
   event.preventDefault();
-  shell.openExternal(href);
+  shell.openExternal(event.currentTarget.href);
 }
 
 const Elastos = () => {
   return (
-    <div className="white_link_with_hover fake_button h40px" onClick={(e) => onLinkClick(e, 'https://elastos.org')}>Elastos <Version/></div>
+    <a className="white_link" href="https://elastos.org" onClick={(e) => onLinkClick(e)}>
+      <img className="valign_middle" src="artwork/elastos-black-small.svg"></img>
+      Elastos <Version/>
+    </a>
   )
 }
 
 const DownloadApp = () => {
   return (
-    <div id='refresh' className="white_link_with_hover fake_button h40px" onClick={(e) => onLinkClick(e, 'https://github.com/coranos/elastos-light-wallet/releases/latest')}>Download App</div>
-  )
-}
-
-const Refresh = () => {
-  return (
-    <div id='refresh' className="white_link_with_hover fake_button h40px" onClick={(e) => refreshBlockchainData()}>
-      Refresh</div>
-  )
-}
-
-const ShowDevTools = () => {
-  return (
-    <div className="white_link fake_button h40px" onClick={(e) => openDevTools()}>Dev Tools</div>
-  )
-}
-
-const Balance = () => {
-  return (
-    <div className="white_link border_radius30px margin20px h100px gray_bg41_fg5A">Balance <p>{balance}</p></div>
-  )
-}
-
-const Votes = () => {
-  return (
-    <div className="white_link border_radius30px margin20px h100px gray_bg41_fg5A">
-    Votes
-    <br/>
-    <div>Producer List Status</div>
-    <br/> {producerListStatus}
-    <br/>
-    <div>
-      <span className="padding_2px">{parsedProducerList.totalvotes}</span>
-      Votes</div>
-    <div>
-      <span className="padding_2px">{parsedProducerList.totalcounts}</span>
-      Counts</div>
-    <div>
-      <span className="padding_2px">{parsedProducerList.producersCandidateCount}</span>
-      Selected Candidates</div>
-    <div>
-      Candidates (
-      <span className="padding_2px">{parsedProducerList.producers.length}</span>
-      total)</div>
-    </div>
-  )
-}
-
-const Send = () => {
-  return (
-    <div className="white_link border_radius30px margin20px h100px">Send</div>
-  )
-}
-
-const Recieve = () => {
-  return (
-    <div className="white_link border_radius30px margin20px h100px">Recieve</div>
-  )
-}
-
-const Transactions = () => {
-  return (
-    <div className="white_link border_radius30px margin20px h100px">Transactions</div>
+    <a className="white_link" href="https://github.com/coranos/elastos-light-wallet/releases/latest" onClick={(e) => onLinkClick(e)}>
+      Download App
+    </a>
   )
 }
 
@@ -1183,67 +1126,429 @@ class App extends React.Component {
     return (<div>
       <table className="w800h600px no_padding no_border">
         <tbody>
-          <tr className="no_padding h40px">
-            <td className="no_padding">
-            <table className="no_padding no_border w100pct gray_bg28_fg5A">
-              <tbody>
-              <tr className="no_padding h40px">
-                <td className="valign_top no_border w60pct">
-                  <Elastos />
-                </td>
-                <td className="valign_top no_border w20pct">
-                  <DownloadApp />
-                </td>
-                <td className="valign_top no_border w10pct">
-                  <Refresh />
-                </td>
-                <td className="valign_top no_border w10pct">
-                  <ShowDevTools />
-                </td>
-              </tr>
-              </tbody>
-            </table>
+          <tr className="no_padding">
+            <td className="valign_top gray_bg28_fg5A no_border">
+              <Elastos />
             </td>
-          </tr>
-          <tr className="no_padding h100px">
-            <td className="no_padding">
-            <table className="no_padding no_border w100pct lower_border_radius30px gray_bg28_fg5A">
-              <tbody>
-                <tr className="no_padding h100px">
-                  <td className="valign_top no_border w40pct">
-                    <Balance />
-                  </td>
-                  <td className="valign_top no_border w40pct">
-                    <Votes />
-                  </td>
-                  <td className="valign_top no_border w20pct">
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            </td>
-          </tr>
-          <tr className="no_padding h200px">
-            <td className="no_padding">
-            <table className="no_padding no_border w100pct">
-              <tbody>
-                <tr className="no_padding h100px">
-                  <td className="valign_top no_border w30pct">
-                    <Send />
-                  </td>
-                  <td className="valign_top no_border w30pct">
-                    <Recieve />
-                  </td>
-                  <td className="valign_top no_border w40pct">
-                    <Transactions />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <td className="valign_top gray_bg28_fg5A no_border">
+              <DownloadApp />
             </td>
           </tr>
           <tr className="no_padding">
-         </tr>
+            <td className="valign_top white_on_purple no_border">
+              <table className="w100pct no_border">
+                <tbody>
+                  <tr>
+                    <td className="black_on_offwhite h20px no_border user_select_none">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="white_on_purple h20px no_border"></td>
+                  </tr>
+                  <tr>
+                    <td id='home' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showHome()}>
+                      Network
+                      <select value={currentNetworkIx} name="network" onChange={(e) => changeNetwork(e)}>
+                        <option value="0">Mainnet</option>
+                        <option value="1">Testnet</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="white_on_purple h20px no_border"></td>
+                  </tr>
+                  <tr>
+                    <td id='home' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showHome()}>
+                      <img className="valign_middle" src="artwork/home.svg"></img>
+                      Home</td>
+                  </tr>
+                  <tr>
+                    <td id='send' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showSend()}>
+                      <img className="valign_middle" src="artwork/send.svg"></img>
+                      Send</td>
+                  </tr>
+                  <tr>
+                    <td id='receive' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showReceive()}>
+                      <img className="valign_middle" src="artwork/receive.svg"></img>
+                      Receive</td>
+                  </tr>
+                  <tr>
+                    <td id='transactions' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showTransactions()}>
+                      <img className="valign_middle" src="artwork/transactions.svg"></img>
+                      Transactions</td>
+                  </tr>
+                  <tr>
+                    <td id='voting' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showVoting()}>
+                      <img className="valign_middle" src="artwork/voting.svg"></img>
+                      Voting</td>
+                  </tr>
+                  <tr>
+                    <td id='refresh' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => refreshBlockchainData()}>
+                      <img className="valign_middle" src="artwork/refresh.svg"></img>
+                      Refresh</td>
+                  </tr>
+                  <tr>
+                    <td className="white_on_purple h250px no_border"></td>
+                  </tr>
+                  <tr>
+                    <td className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showLogin()}>Logout</td>
+                  </tr>
+                  <tr>
+                    <td className="white_on_purple_with_hover h20px fake_button" onClick={(e) => openDevTools()}>Show Dev Tools</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td className="valign_top black_on_offwhite no_border no_padding">
+              <table className="w626px black_on_offwhite no_border no_padding">
+                <tbody>
+                  <tr id="ledger-login">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Ledger Status</div>
+                      <p><LedgerMessage/>
+                      </p>
+                      <UseLedgerButton/>
+                    </td>
+                  </tr>
+                  <tr id="private-key-login">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Private Key</div>
+                      <p>Enter private key manually.</p>
+                      <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showPrivateKeyEntry()}>Enter Key</div>
+                    </td>
+                  </tr>
+                  <tr id="private-key-entry">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Private Key</div>
+                      <br/>
+                      <input style={{
+                          fontFamily: 'monospace'
+                        }} type="text" size="64" id="privateKey" placeholder="Private Key"></input>
+                      <br/>
+                      <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => getPublicKeyFromPrivateKey()}>Use Private Key</div>
+                    </td>
+                  </tr>
+                  <tr id="private-key-generate">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Generate New Private Key</div>
+                      <p>Generate new private key.</p>
+                      <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showGenerateNewPrivateKey()}>Generate Key</div>
+                    </td>
+                  </tr>
+                  <tr id="private-key-generator">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">New Private Key</div>
+                      <br/>
+                      <br/>
+                      {generatedPrivateKeyHex}
+                      <br/>
+                      <br/>
+                      <hr/>
+                      <strong>
+                      Reminder: Save this private key.
+                      <br/>
+                      If you lose this key, there will be no way to recover your coins.
+                      <br/>
+                      Keep a backup of it in a safe place.
+                      <br/>
+                      To use this key, copy it (you can use the convenient copy button), and use to log in to the wallet.
+                      <br/>
+                      </strong>
+                      <br/>
+                      <div className="white_on_gray bordered display_inline_block float_left fake_button rounded padding_5px" onClick={(e) => copyToClipboard()}>Copy</div>
+                      <br/>
+                      <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showLogin()}>Done</div>
+                      <br/>
+                    </td>
+                  </tr>
+                  <tr id="your-address">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Your Address</div>
+                      <br/>{address}
+                    </td>
+                  </tr>
+                  <tr id="transaction-list-small">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white ` display_inline_block">Previous Transactions ({parsedTransactionHistory.length}
+                        total)</div>
+                      <div className="gray_on_white float_right display_inline_block">&nbsp;{getConfirmations()}&nbsp;
+                        Confirmations</div>
+                      <div className="gray_on_white float_right display_inline_block">&nbsp;{blockchainState.height}&nbsp;
+                        Blocks</div>
+                      <br/>
+                      <table className="w100pct black_on_offwhite no_border whitespace_nowrap">
+                        <tbody>
+                          <tr>
+                            <td className="no_border no_padding">Nbr</td>
+                            <td className="no_border no_padding">Icon</td>
+                            <td className="no_border no_padding">Value</td>
+                            <td className="no_border no_padding">TX</td>
+                            <td className="no_border no_padding">Time</td>
+                          </tr>
+                          {
+                            parsedTransactionHistory.map((item, index) => {
+                              if (index > 2) {
+                                return undefined;
+                              }
+                              return (<tr key={index}>
+                                <td className="no_border no_padding">{item.n}</td>
+                                <td className="no_border no_padding">
+                                  <TransactionHistoryElementIcon item={item}/>{/* item.type */}
+                                </td>
+                                <td className="no_border no_padding">{item.value}
+                                  ELA</td>
+                                <td className="no_border no_padding">
+                                  <a href={item.txDetailsUrl} onClick={(e) => onLinkClick(e)}>{item.txHash}</a>
+                                </td>
+                                <td className="no_border no_padding">
+                                  {item.time}
+                                </td>
+                              </tr>)
+                            })
+                          }
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr id="transaction-list-large">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Transaction List Status</div>
+                      <br/> {transactionHistoryStatus}
+                      <div className="gray_on_white">Blockchain Status</div>
+                      <br/> {blockchainStatus}
+                      <br/>
+                      <div className="gray_on_white ` display_inline_block">Previous Transactions ({parsedTransactionHistory.length}
+                        total)</div>
+                      <div className="gray_on_white float_right display_inline_block">&nbsp;{getConfirmations()}&nbsp;
+                        Confirmations</div>
+                      <div className="gray_on_white float_right display_inline_block">&nbsp;{blockchainState.height}&nbsp;
+                        Blocks</div>
+                      <p></p>
+                      <div className="h420px overflow_auto">
+                        <table className="w100pct black_on_offwhite no_border whitespace_nowrap">
+                          <tbody>
+                            <tr>
+                              <td className="no_border no_padding">Nbr</td>
+                              <td className="no_border no_padding">Icon</td>
+                              <td className="no_border no_padding">Value</td>
+                              <td className="no_border no_padding">TX</td>
+                              <td className="no_border no_padding">Time</td>
+                            </tr>
+                            {
+                              parsedTransactionHistory.map((item, index) => {
+                                return (<tr key={index}>
+                                  <td className="no_border no_padding">{item.n}</td>
+                                  <td className="no_border no_padding">
+                                    <TransactionHistoryElementIcon item={item}/>{/* item.type */}
+                                  </td>
+                                  <td className="no_border no_padding">{item.value}
+                                    ELA</td>
+                                  <td className="no_border no_padding">
+                                    <a href={item.txDetailsUrl} onClick={(e) => onLinkClick(e)}>{item.txHash}</a>
+                                  </td>
+                                  <td className="no_border no_padding">
+                                    {item.time}
+                                  </td>
+                                </tr>)
+                              })
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="transaction-more-info">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">More Info</div>
+                      <br/>Tap on the transaction ID to view further details or visit http://blockchain.elastos.org
+                      <br/>Or https://blockchain-beta.elastos.org/tx/
+                    </td>
+                  </tr>
+                  <tr id="from-address">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">From Address</div>
+                      <p>{address}</p>
+                    </td>
+                  </tr>
+                  <tr id="balance">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Balance</div>
+                      <p>{balance}</p>
+                    </td>
+                  </tr>
+                  <tr id="send-amount">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Send Amount</div>
+                      <br/>
+                      <input style={{
+                          fontFamily: 'monospace'
+                        }} type="text" size="64" id="sendAmount" placeholder="Send Amount"></input>
+                    </td>
+                  </tr>
+                  <tr id="to-address">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">To Address</div>
+                      <br/>
+                      <input style={{
+                          fontFamily: 'monospace'
+                        }} type="text" size="64" id="sendToAddress" placeholder="Send To Address"></input>
+                    </td>
+                  </tr>
+                  <tr id="send-spacer-01">
+                    <td className="black_on_white h200px no_border">
+                      <div className="gray_on_white">Balance Status</div>
+                      <br/> {balanceStatus}
+                      <br/>
+                      <div className="gray_on_white">Send Status</div>
+                      <br/>
+                      <div className="h100px w600px overflow_auto">
+                        <table>
+                          <tbody>
+                            {
+                              sendToAddressStatuses.map((sendToAddressStatus, index) => {
+                                return (<tr key={index}>
+                                  <td>{sendToAddressStatus}</td>
+                                </tr>)
+                              })
+                            }
+                            {
+                              sendToAddressLinks.map((item, index) => {
+                                return (<tr key={index}>
+                                  <td>
+                                    <a href={item.txDetailsUrl} onClick={(e) => onLinkClick(e)}>{item.txHash}</a>
+                                  </td>
+                                </tr>)
+                              })
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="confirm-and-see-fees">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Confirm</div>
+                      <p>Tap ‘Next’ to confirm the fees for your transaction.</p>
+                      <p></p>
+                      <div className="lightgray_border white_on_black bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showConfirmAndSeeFees()}>Next</div>
+                    </td>
+                  </tr>
+                  <tr id="fees">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white display_inline_block">Fees (in Satoshis)</div>
+                      <br/>
+                      <input style={{
+                          fontFamily: 'monospace'
+                        }} type="text" size="64" id="feeAmount" placeholder="Fees"></input>
+                      <p></p>
+                      <div className="white_on_black lightgray_border bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => updateAmountAndFeesAndRenderApp()}>Estimated New Balance</div>
+                    </td>
+                  </tr>
+                  <tr id="cancel-confirm-transaction">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Confirm</div>
+                      <p>Your balance on {getCurrentNetwork().NAME}
+                        will be deducted {sendAmount}
+                        ELA + {feeAmountEla}
+                        ELA in fees.</p>
+                      <p></p>
+                      <div className="white_on_black lightgray_border bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => sendAmountToAddress()}>Confirm</div>
+                      <div className="white_on_gray darkgray_border bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => cancelSend()}>Cancel</div>
+                    </td>
+                  </tr>
+                  <tr id="completed-transaction">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="white_on_black lightgray_border bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showTransactions()}>Show Transactions</div>
+                    </td>
+                  </tr>
+                  <tr id="candidate-list">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Producer List Status</div>
+                      <br/> {producerListStatus}
+                      <br/>
+                      <div className="gray_on_white float_right display_inline_block">
+                        <span className="padding_2px">{parsedProducerList.totalvotes}</span>
+                        Votes</div>
+                      <div className="gray_on_white float_right display_inline_block">
+                        <span className="padding_2px">{parsedProducerList.totalcounts}</span>
+                        Counts</div>
+                      <div className="gray_on_white float_right display_inline_block">
+                        <span className="padding_2px">{parsedProducerList.producersCandidateCount}</span>
+                        Selected Candidates</div>
+                      <div className="gray_on_white display_inline_block">
+                        Candidates (
+                        <span className="padding_2px">{parsedProducerList.producers.length}</span>
+                        total)</div>
+                      <p></p>
+                      <div className="h200px overflow_auto">
+                        <table className="w100pct black_on_offwhite no_border whitespace_nowrap">
+                          <tbody>
+                            <tr>
+                              <td className="no_border no_padding">N</td>
+                              <td className="no_border no_padding">Nickname</td>
+                              <td className="no_border no_padding">Active</td>
+                              <td className="no_border no_padding">Votes</td>
+                              <td className="no_border no_padding">Select</td>
+                            </tr>
+                            {
+                              parsedProducerList.producers.map((item, index) => {
+                                return (<tr key={index}>
+                                  <td className="no_border no_padding">{item.n}</td>
+                                  <td className="no_border no_padding">{item.nickname}</td>
+                                  <td className="no_border no_padding">{item.active}</td>
+                                  <td className="no_border no_padding">{item.votes}</td>
+                                  <td className="white_on_purple_with_hover h20px fake_button" onClick={(e) => toggleProducerSelection({index})}>
+                                    <ProducerSelectionButtonText item={item}/>
+                                  </td>
+                                </tr>)
+                              })
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr id="candidate-vote-button">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="lightgray_border white_on_black bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => sendVoteTx()}>Send Votes</div>
+                    </td>
+                  </tr>
+                  <tr id="candidate-vote-list">
+                    <td className="black_on_white h20px darkgray_border">
+                      <div className="gray_on_white">Candidate List Status</div>
+                      <br/> {candidateVoteListStatus}
+                      <br/>
+                      <div className="gray_on_white ` display_inline_block">
+                        Candidate Votes (
+                        <span>{parsedCandidateVoteList.candidateVotes.length}</span>
+                        total)</div>
+                      <p></p>
+                      <div className="h200px overflow_auto">
+                        <table className="w100pct black_on_offwhite no_border whitespace_nowrap">
+                          <tbody>
+                            <tr>
+                              <td className="no_border no_padding">N</td>
+                              <td className="no_border no_padding">Nickname</td>
+                              <td className="no_border no_padding">Votes</td>
+                            </tr>
+                            {
+                              parsedCandidateVoteList.candidateVotes.map((item, index) => {
+                                return (<tr key={index}>
+                                  <td className="no_border no_padding">{item.n}</td>
+                                  <td className="no_border no_padding">{item.nickname}</td>
+                                  <td className="no_border no_padding">{item.votes}</td>
+                                </tr>)
+                              })
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>)
