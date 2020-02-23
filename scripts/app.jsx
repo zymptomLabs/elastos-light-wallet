@@ -856,7 +856,8 @@ const hideEverything = () => {
   clearButtonSelection('receive');
   clearButtonSelection('transactions');
   clearButtonSelection('voting');
-  hide('private-key-entry');
+  hide('logged-out-actions');
+  hide('logged-in-actions');
   hide('cancel-confirm-transaction');
   hide('completed-transaction');
   hide('fees');
@@ -869,11 +870,7 @@ const hideEverything = () => {
   hide('transaction-list-small');
   hide('transaction-list-large');
   hide('your-address');
-  hide('private-key-login');
-  hide('ledger-login');
   hide('send-spacer-01');
-  hide('private-key-generate');
-  hide('private-key-generator');
   hide('candidate-list');
   hide('candidate-vote-button');
   hide('candidate-vote-list');
@@ -888,7 +885,7 @@ const openDevTools = () => {
   }
 }
 
-const copyToClipboard = () => {
+const copyPrivateKeyHexToClipboard = () => {
   clipboard.writeText(generatedPrivateKeyHex);
   alert(`copied to clipboard:\n${generatedPrivateKeyHex}`)
 }
@@ -897,9 +894,7 @@ const showLogin = () => {
   clearGlobalData();
   hideEverything();
   clearSendData();
-  show('private-key-login');
-  show('ledger-login');
-  show('private-key-generate');
+  show('logged-out-actions');
 }
 
 const showHome = () => {
@@ -997,16 +992,7 @@ const showVoting = () => {
   selectButton('voting');
 }
 
-const showPrivateKeyEntry = () => {
-  hideEverything();
-  clearSendData();
-  show('private-key-entry');
-}
-
 const showGenerateNewPrivateKey = () => {
-  hideEverything();
-  clearSendData();
-  show('private-key-generator');
   generatedPrivateKeyHex = crypto.randomBytes(32).toString('hex');
   renderApp();
 }
@@ -1068,9 +1054,9 @@ const UseLedgerButton = () => {
     ledgerDeviceInfo
     ? ledgerDeviceInfo.enabled
     : false) {
-    return (<div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => getPublicKeyFromLedger()}>Use Ledger</div>);
+    return (<div className="bordered display_inline_block float_right fake_button rounded padding_5px white_link_with_hover" onClick={(e) => getPublicKeyFromLedger()}>Use Ledger Device</div>);
   } else {
-    return (<div className="white_on_pink bordered display_inline_block float_right fake_button rounded padding_5px">Use Ledger</div>);
+    return (<div className="text_decoration_line_through bordered display_inline_block float_right fake_button rounded padding_5px white_link_with_hover">Use Ledger Device</div>);
   }
   return (<div/>);
 }
@@ -1106,26 +1092,73 @@ const onLinkClick = (event, href) => {
 
 const Elastos = () => {
   return (
-    <div className="white_link_with_hover fake_button h40px" onClick={(e) => onLinkClick(e, 'https://elastos.org')}>Elastos <Version/></div>
+    <div className="white_link_with_hover text_decoration_none fake_button h40px" onClick={(e) => onLinkClick(e, 'https://elastos.org')}>Elastos <Version/></div>
   )
 }
 
 const DownloadApp = () => {
   return (
-    <div id='refresh' className="white_link_with_hover fake_button h40px" onClick={(e) => onLinkClick(e, 'https://github.com/coranos/elastos-light-wallet/releases/latest')}>Download App</div>
+    <div id='refresh' className="white_link_with_hover text_decoration_none fake_button h40px" onClick={(e) => onLinkClick(e, 'https://github.com/coranos/elastos-light-wallet/releases/latest')}>Download App</div>
   )
 }
 
 const Refresh = () => {
   return (
-    <div id='refresh' className="white_link_with_hover fake_button h40px" onClick={(e) => refreshBlockchainData()}>
+    <div id='refresh' className="white_link_with_hover text_decoration_none fake_button h40px" onClick={(e) => refreshBlockchainData()}>
       Refresh</div>
   )
 }
 
 const ShowDevTools = () => {
   return (
-    <div className="white_link fake_button h40px" onClick={(e) => openDevTools()}>Dev Tools</div>
+    <div className="white_link text_decoration_none fake_button h40px" onClick={(e) => openDevTools()}>Dev Tools</div>
+  )
+}
+
+const Networks = () => {
+  return (
+    <div className="white_link text_decoration_none fake_button h40px">
+      Network
+      <select value={currentNetworkIx} name="network" onChange={(e) => changeNetwork(e)}>
+        <option value="0">Mainnet</option>
+        <option value="1">Testnet</option>
+      </select>
+    </div>
+  )
+}
+
+const SettingsManagement = () => {
+  return (
+    <div className="white_link text_decoration_none border_radius30px margin20px h200px gray_bg41_fg5A">
+      <Networks />
+      <hr/>
+      <div className="h40px">
+        <LedgerMessage/>
+        <UseLedgerButton/>
+      </div>
+      <hr/>
+      <div className="h40px">
+        <input className="monospace" type="text" size="64" id="privateKey" placeholder="Private Key"></input>
+        <div className="bordered display_inline_block float_right fake_button rounded padding_5px white_link_with_hover" onClick={(e) => getPublicKeyFromPrivateKey()}>Use Private Key</div>
+      </div>
+      <hr/>
+      <div className="h40px">
+        <div className="bordered display_inline_block float_right fake_button rounded padding_5px white_link_with_hover" onClick={(e) => showGenerateNewPrivateKey()}>Generate Key</div>
+        <div className="monospace white_link">{generatedPrivateKeyHex}</div>
+        <div className="bordered display_inline_block fake_button rounded padding_5px white_link_with_hover" onClick={(e) => copyPrivateKeyHexToClipboard()}>Copy</div>
+        <br/>
+        <strong>
+        Reminder: Save this private key.
+        <br/>
+        If you lose this key, there will be no way to recover your coins.
+        <br/>
+        Keep a backup of it in a safe place.
+        <br/>
+        To use this key, copy it (you can use the convenient copy button), and use to log in to the wallet.
+        <br/>
+        </strong>
+      </div>
+    </div>
   )
 }
 
@@ -1183,7 +1216,7 @@ class App extends React.Component {
     return (<div>
       <table className="w800h600px no_padding no_border">
         <tbody>
-          <tr className="no_padding h40px">
+          <tr className="no_padding h20px">
             <td className="no_padding">
             <table className="no_padding no_border w100pct gray_bg28_fg5A">
               <tbody>
@@ -1223,7 +1256,20 @@ class App extends React.Component {
             </table>
             </td>
           </tr>
-          <tr className="no_padding h200px">
+          <tr id="logged-out-actions" className="no_padding h100px">
+            <td className="no_padding">
+            <table className="no_padding no_border w100pct lower_border_radius30px gray_bg28_fg5A">
+              <tbody>
+                <tr className="no_padding h100px">
+                  <td className="valign_top no_border w100pct">
+                    <SettingsManagement />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+          <tr id="logged-in-actions" className="no_padding h200px">
             <td className="no_padding">
             <table className="no_padding no_border w100pct">
               <tbody>
@@ -1246,17 +1292,9 @@ class App extends React.Component {
          </tr>
         </tbody>
       </table>
-
+{/* OLD APP BELOW */}
         <table className="w800h600px no_padding no_border">
           <tbody>
-            <tr className="no_padding">
-              <td className="valign_top gray_bg28_fg5A no_border">
-                <Elastos />
-              </td>
-              <td className="valign_top gray_bg28_fg5A no_border">
-                <DownloadApp />
-              </td>
-            </tr>
             <tr className="no_padding">
               <td className="valign_top white_on_purple no_border">
                 <table className="w100pct no_border">
@@ -1270,11 +1308,6 @@ class App extends React.Component {
                     </tr>
                     <tr>
                       <td id='home' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => showHome()}>
-                        Network
-                        <select value={currentNetworkIx} name="network" onChange={(e) => changeNetwork(e)}>
-                          <option value="0">Mainnet</option>
-                          <option value="1">Testnet</option>
-                        </select>
                       </td>
                     </tr>
                     <tr>
@@ -1306,11 +1339,6 @@ class App extends React.Component {
                         Voting</td>
                     </tr>
                     <tr>
-                      <td id='refresh' className="white_on_purple_with_hover h20px fake_button" onClick={(e) => refreshBlockchainData()}>
-                        <img className="valign_middle" src="artwork/refresh.svg"></img>
-                        Refresh</td>
-                    </tr>
-                    <tr>
                       <td className="white_on_purple h250px no_border"></td>
                     </tr>
                     <tr>
@@ -1325,65 +1353,6 @@ class App extends React.Component {
               <td className="valign_top black_on_offwhite no_border no_padding">
                 <table className="w626px black_on_offwhite no_border no_padding">
                   <tbody>
-                    <tr id="ledger-login">
-                      <td className="black_on_white h20px darkgray_border">
-                        <div className="gray_on_white">Ledger Status</div>
-                        <p><LedgerMessage/>
-                        </p>
-                        <UseLedgerButton/>
-                      </td>
-                    </tr>
-                    <tr id="private-key-login">
-                      <td className="black_on_white h20px darkgray_border">
-                        <div className="gray_on_white">Private Key</div>
-                        <p>Enter private key manually.</p>
-                        <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showPrivateKeyEntry()}>Enter Key</div>
-                      </td>
-                    </tr>
-                    <tr id="private-key-entry">
-                      <td className="black_on_white h20px darkgray_border">
-                        <div className="gray_on_white">Private Key</div>
-                        <br/>
-                        <input style={{
-                            fontFamily: 'monospace'
-                          }} type="text" size="64" id="privateKey" placeholder="Private Key"></input>
-                        <br/>
-                        <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => getPublicKeyFromPrivateKey()}>Use Private Key</div>
-                      </td>
-                    </tr>
-                    <tr id="private-key-generate">
-                      <td className="black_on_white h20px darkgray_border">
-                        <div className="gray_on_white">Generate New Private Key</div>
-                        <p>Generate new private key.</p>
-                        <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showGenerateNewPrivateKey()}>Generate Key</div>
-                      </td>
-                    </tr>
-                    <tr id="private-key-generator">
-                      <td className="black_on_white h20px darkgray_border">
-                        <div className="gray_on_white">New Private Key</div>
-                        <br/>
-                        <br/>
-                        {generatedPrivateKeyHex}
-                        <br/>
-                        <br/>
-                        <hr/>
-                        <strong>
-                        Reminder: Save this private key.
-                        <br/>
-                        If you lose this key, there will be no way to recover your coins.
-                        <br/>
-                        Keep a backup of it in a safe place.
-                        <br/>
-                        To use this key, copy it (you can use the convenient copy button), and use to log in to the wallet.
-                        <br/>
-                        </strong>
-                        <br/>
-                        <div className="white_on_gray bordered display_inline_block float_left fake_button rounded padding_5px" onClick={(e) => copyToClipboard()}>Copy</div>
-                        <br/>
-                        <div className="white_on_gray bordered display_inline_block float_right fake_button rounded padding_5px" onClick={(e) => showLogin()}>Done</div>
-                        <br/>
-                      </td>
-                    </tr>
                     <tr id="your-address">
                       <td className="black_on_white h20px darkgray_border">
                         <div className="gray_on_white">Your Address</div>

@@ -14,6 +14,23 @@
   src: url("css/fonts/BioSans-SemiBold.otf") format("opentype");
 }
 
+select, input {
+  color: white;
+  background-color: black;
+}
+
+.monospace {
+  fontFamily: "monospace"
+}
+
+.text_decoration_line_through {
+  text-decoration: line-through;
+}
+
+.text_decoration_none {
+  text-decoration: none;
+}
+
 .border_radius30px {
   border-radius: 30px;
   padding: 30px;
@@ -30,18 +47,15 @@
 
 .white_link {
   color: white;
-  text-decoration: none;
 }
 
 .white_link_with_hover {
   color: white;
-  text-decoration: none;
 }
 
 .white_link_with_hover:hover {
   color: white;
   background-color: #333;
-  text-decoration: none;
 }
 
 .gray_bg24_fg5A {
@@ -131,11 +145,19 @@ p {
 }
 
 .h40px {
-  height: 20px;
+  height: 40px;
+}
+
+.h60px {
+  height: 60px;
 }
 
 .h100px {
   height: 100px;
+}
+
+.h150px {
+  height: 150px;
 }
 
 .h200px {
@@ -309,7 +331,6 @@ p {
   touch-action: manipulation;
   cursor: pointer;
   user-select: none;
-  text-decoration: none;
 }
 
 .user_select_none {
