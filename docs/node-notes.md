@@ -21,12 +21,12 @@
 ### to smoke test:
 
   verify block height is the same:
-  <http://elastos.coranos.io:21334/api/v1/node/state>
+  <http://elastos.coranos.cc:20334/api/v1/node/state>
   vs
   <https://blockchain.elastos.org/blocks>
 
   verify "neighbors" exists and has values:
-  <http://elastos.coranos.io:21334/api/v1/node/state>
+  <http://elastos.coranos.cc:2o334/api/v1/node/state>
 
 ### to start:
 
