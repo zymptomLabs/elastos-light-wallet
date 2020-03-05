@@ -26,7 +26,7 @@
   <https://blockchain.elastos.org/blocks>
 
   verify "neighbors" exists and has values:
-  <http://elastos.coranos.cc:2o334/api/v1/node/state>
+  <http://elastos.coranos.cc:20334/api/v1/node/state>
 
 ### to start:
 
