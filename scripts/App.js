@@ -35,13 +35,13 @@ const EXPLORER = 'https://blockchain.elastos.org';
 const RSS_FEED_URL = 'https://news.elastos.org/feed/';
 
 const REST_SERVICES = [{
-    name: 'node1',
-    url: 'https://node1.elaphant.app',
-  },
-  {
-    name: 'node3',
-    url: 'https://node3.elaphant.app',
-  },
+  name: 'node1',
+  url: 'https://node1.elaphant.app',
+},
+{
+  name: 'node3',
+  url: 'https://node3.elaphant.app',
+},
 ];
 
 /** global variables */
@@ -211,7 +211,7 @@ const isValidDecimal = (testAmount) => {
   const isValid = DECIMAL_REGEX.test(testAmount);
   mainConsole.log('isValidDecimal', 'testAmount', testAmount, isValid);
   return isValid;
-}
+};
 
 
 const formatDate = (date) => {
@@ -392,7 +392,7 @@ const getJson = (url, readyCallback, errorCallback) => {
         errorCallback({
           'status': this.status,
           'statusText': this.statusText,
-          'response': this.response
+          'response': this.response,
         });
       }
     }
@@ -558,9 +558,9 @@ const updateAmountAndFees = () => {
   feeAmountSats = GuiUtils.getValue('feeAmount');
 
   mainConsole.log('INTERIM updateAmountAndFees',
-    'sendAmount:', sendAmount,
-    'sendToAddress:', sendToAddress,
-    'feeAmountSats:', feeAmountSats,
+      'sendAmount:', sendAmount,
+      'sendToAddress:', sendToAddress,
+      'feeAmountSats:', feeAmountSats,
   );
 
   if (sendToAddress.length == 0) {
